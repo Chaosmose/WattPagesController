@@ -25,6 +25,13 @@
 //
 
 
+typedef enum {
+    WATT_UnknowTrend,
+    WATT_TrendNext,
+    WATT_TrendPrevious
+} WATTMovementTrend;
+
+
 #import "WATTPagingContainer.h"
 
 @interface WATTPagingContainer ()
@@ -39,6 +46,7 @@
     // Each key correspond to the "identifier" we use to dequeue
     NSMutableDictionary     *_viewControllers;
     NSMutableArray          *_identifiersHash;
+    WATTMovementTrend       _trend; // we could use this state to perform predictive preloading in a future version
     
 }
 
@@ -50,12 +58,13 @@
     
     _viewControllers=[NSMutableDictionary dictionary];
     _identifiersHash=[NSMutableArray array];
+    _trend=WATT_UnknowTrend;
     
     // Set up the main view
     [self.view setAutoresizesSubviews:YES];
     [self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [self.view setBackgroundColor:[UIColor redColor]];
-    [self.view setFrame:[self _adpativeReferenceBounds]];
+    [self.view setBounds:[self _adpativeReferenceBounds]];
     
     // Configure and add the scroll view
     
@@ -66,6 +75,7 @@
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     [_scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+    [_scrollView setDelegate:self];
     [self.view addSubview:_scrollView];
 }
 
@@ -109,19 +119,16 @@
 
 
 -(CGRect)_referenceBounds{
-    CGRect applicatonBounds=[[UIScreen mainScreen] bounds];
-    if([UIApplication sharedApplication].statusBarHidden){
-        return applicatonBounds;
-    }else{
-        // We remove the status bar height
-        applicatonBounds.size.height=applicatonBounds.size.height-[UIApplication sharedApplication].statusBarFrame.size.height;
-        return applicatonBounds;
-    }
+    return [[UIScreen mainScreen] bounds];
 }
 
-
 -(CGRect)_adpativeReferenceBounds{
-    return [self _adaptRect:[self _referenceBounds]];
+    CGRect refBounds=[self _adaptRect:[self _referenceBounds]];
+    // we exclude the status bar if necessary
+    CGRect barFrame= [self _adaptRect:[UIApplication sharedApplication].statusBarFrame];
+    refBounds.origin=CGPointMake(0.f, 0.f);
+    refBounds.size.height=refBounds.size.height-barFrame.size.height;
+    return refBounds;
 }
 
 -(CGRect)_rectRotate:(CGRect)rect{
@@ -159,10 +166,7 @@
         BOOL outOfLimits = newIndex >= pageCount || newIndex < 0;
         
         if (!outOfLimits){
-            CGRect pageFrame = [self _adpativeReferenceBounds];
-            pageFrame.origin.y = 0;
-            pageFrame.origin.x =[self _adpativeReferenceBounds].size.width * newIndex;
-            controller.view.frame = pageFrame;
+            [self _adjustViewController:controller atIndex:newIndex];
         }else{
             CGRect pageFrame = [self _adpativeReferenceBounds];
             pageFrame.origin.y = [self _adpativeReferenceBounds].size.height;
@@ -173,6 +177,15 @@
         [NSException raise:@"Inconsistency"
                     format:@"UIViewController should conform to WATTPageProtocol current class is %@",NSStringFromClass([controller class])];
     }
+}
+
+
+-(void)_adjustViewController:(UIViewController*)controller atIndex:(NSInteger)index{
+    CGRect pageFrame = [self _adpativeReferenceBounds];
+    pageFrame.origin.y = 0;
+    CGFloat x=[self _adpativeReferenceBounds].size.width * (CGFloat)index;
+    pageFrame.origin.x = x;
+    controller.view.frame = pageFrame;
 }
 
 
@@ -248,34 +261,27 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender{
-    /*
 
     CGFloat pageWidth = _scrollView.frame.size.width;
-    float fractionalPage = _scrollView.contentOffset.x / pageWidth;
+    CGFloat fractionalPage = _scrollView.contentOffset.x / pageWidth;
+    NSInteger newIndex=floor(fractionalPage);
     
-	NSInteger lowerNumber = floor(fractionalPage);
-	NSInteger upperNumber = lowerNumber + 1;
-     if (lowerNumber == currentPage.pageIndex){
-     if (upperNumber != nextPage.pageIndex){
-     [self applyNewIndex:upperNumber pageController:nextPage];
-     }
-     }else if (upperNumber == currentPage.pageIndex){
-     if (lowerNumber != nextPage.pageIndex){
-     [self applyNewIndex:lowerNumber pageController:nextPage];
-     }
-     }else{
-     if (lowerNumber == nextPage.pageIndex){
-     [self applyNewIndex:upperNumber pageController:currentPage];
-     }else if (upperNumber == nextPage.pageIndex){
-     [self applyNewIndex:lowerNumber pageController:currentPage];
-     }else{
-     [self applyNewIndex:lowerNumber pageController:currentPage];
-     [self applyNewIndex:upperNumber pageController:nextPage];
-     }
-     }
-     [currentPage updateTextViews:NO];
-     [nextPage updateTextViews:NO];
-     */
+    if(newIndex!=_pageIndex){
+        _pageIndex=newIndex;
+        NSLog(@"INDEX HAS CHANGED %i",_pageIndex);
+        
+        [self _applyNewPageIndex:_pageIndex];
+    }
+    
+    CGFloat currentIndex=(CGFloat)_pageIndex;
+    if(fractionalPage==currentIndex)
+        _trend=WATT_UnknowTrend;
+    else if(fractionalPage>=currentIndex)
+        _trend=WATT_TrendNext;
+    else
+        _trend=WATT_TrendPrevious;
+    
+     NSLog(@"IDX : %f fractionalPage :%f %@",currentIndex,fractionalPage,_trend==WATT_TrendNext?@"NEXT":_trend==WATT_TrendPrevious?@"PREVIOUS":@"UNKNOWN");
 }
 
 
@@ -297,6 +303,35 @@
 }
 
 
+#pragma mark - Autorotation
+
+//IOS 6
+-(BOOL)shouldAutorotate{
+    return YES;
+}
+// IOS 6
+-(NSUInteger)supportedInterfaceOrientations{
+    return UIInterfaceOrientationMaskAll;
+}
+//IOS 6
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+    return [self _currentOrientation];
+}
+
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
+// Retro compatibility with IOS 5 (Deprecated)
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+    return YES;
+}
+#endif
+
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    // Adjust
+    //[self _adjustViewController: atIndex:_pageIndex];
+}
 
 
 @end

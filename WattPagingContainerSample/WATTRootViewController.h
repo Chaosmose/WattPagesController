@@ -29,6 +29,8 @@
 #import "WATTPagingContainer.h"
 #import "WATTPageController.h"
 #import "WATTPageModel.h"
+#import "WATTItemViewController.h"
+#import "WATTItemModel.h"
 
 @interface WATTRootViewController : WATTPagingContainer<WATTPagingDataSource>
 

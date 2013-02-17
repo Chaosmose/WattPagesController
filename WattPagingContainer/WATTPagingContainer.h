@@ -24,8 +24,7 @@
 // THE SOFTWARE.
 //
 
-//  This component has been inspirated by Matt Gallaghers' PagingScrollViewController
-//  Thank s Matt !
+//  This component has been originally inspirated by Matt Gallaghers' PagingScrollViewController approach : Thank s Matt !
 //  http://www.cocoawithlove.com/2009/01/multiple-virtual-pages-in-uiscrollview.html
 
 
@@ -36,7 +35,7 @@
 @protocol WATTPageProtocol;
 
 /**
- `WATTPagingContainer` is an opensource alternative to UIPageController (implementing page sliding & compliant with IOS5).  `WATTPagingContainer`  is a container that allows to navigate with virtual paging.
+ `WATTPagingContainer` is an opensource alternative to UIPageController (implementing page sliding & compliant with IOS5).  `WATTPagingContainer`  is a container that allows to navigate between viewControllers using virtual paging.
  
  ## System requirements
  -IOS 5.X & more
@@ -57,6 +56,8 @@ typedef enum {
     WATTSlidingDirectionHorizontal,
     WATTSlidingDirectionVertical
 } WATTSlidingDirection;
+
+
 
 @interface WATTPagingContainer : UIViewController<UIScrollViewDelegate>{
 }

@@ -64,7 +64,7 @@
                           delay:0.f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         [weakSelf.webView setAlpha:0.8f];
+                         [weakSelf.webView setAlpha:1.0f];
                          [weakSelf.activityIndicator stopAnimating];
                          [weakSelf.activityIndicator setAlpha:0.f];
                      } completion:^(BOOL finished) {
@@ -87,6 +87,7 @@
                 [self _prepareForLoading];
             }
             if(urlHasChanged){
+                [self.webView loadHTMLString:@"" baseURL:nil];
                 _currentRequest=[NSURLRequest requestWithURL:castedModel.url];
                 [self.webView setDelegate:self];
                 [self.webView loadRequest:_currentRequest];

@@ -47,6 +47,17 @@
 #pragma mark - data 
 
 -(void)_loadItems{
+    
+    if(!_listOfItem){
+        _listOfItem=[NSMutableArray array];
+        for (int i=1; i<6;i++) {
+            WATTItemModel *model=[WATTItemModel alloc];
+            model.imageName=[NSString stringWithFormat:@"nombres.00%i.jpg",i];
+            [_listOfItem addObject:model];
+        }
+    }
+
+ /*
     if(!_listOfItem){
         _listOfItem=[NSMutableArray array];
         NSURL *url=[[NSBundle mainBundle] URLForResource:@"Data" withExtension:@"plist"];
@@ -57,6 +68,7 @@
             [_listOfItem addObject:model];
         }
     }
+  */
 }
 
 -(WATTPageModel*)_modelAtIndex:(NSUInteger)index{
@@ -68,7 +80,24 @@
 
 
 -(UIViewController*)viewControllerForIndex:(NSUInteger)index{
+    
+    // 1- We try to reuse an existing viewController
+    WATTItemViewController*controller=(WATTItemViewController*)[self dequeueViewControllerWithClass:[WATTItemViewController class]];
+    
+    // 2- If there is no view Controllers we instanciate one.
+    if(!controller)
+        controller=[[self storyboard] instantiateViewControllerWithIdentifier:@"imagePage"];
+    
+    // 3- Important : controller.view must be called once
+    // So we test it to for the initialization cycle, before to configure
+    if(controller.view){
+        // 4 - We pass the model to the view Controller.
+        [controller configureWithModel:[self _modelAtIndex:index]];
+    }
+    
+    return controller;
 
+    /*
     // 1- We try to reuse an existing viewController
     WATTPageController*controller=(WATTPageController*)[self dequeueViewControllerWithClass:[WATTPageController class]];
 
@@ -84,6 +113,8 @@
     }
     
     return controller;
+     
+    */
 }
 
 
