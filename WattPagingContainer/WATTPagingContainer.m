@@ -168,9 +168,9 @@ typedef enum {
         if (!outOfLimits){
             [self _adjustViewController:controller atIndex:newIndex];
         }else{
-            CGRect pageFrame = [self _adpativeReferenceBounds];
-            pageFrame.origin.y = [self _adpativeReferenceBounds].size.height;
-            controller.view.frame = pageFrame;
+            //CGRect pageFrame = [self _adpativeReferenceBounds];
+            //pageFrame.origin.y = [self _adpativeReferenceBounds].size.height;
+            //controller.view.frame = pageFrame;
         }
         
     }else{
@@ -221,9 +221,15 @@ typedef enum {
 	_scrollView.contentOffset = CGPointMake(0, 0);
     
     _pageIndex=0;
+    
 	[self _applyNewPageIndex:0];
-	[self _applyNewPageIndex:1];
-    [self goToPage:0];
+    [self _applyNewPageIndex:1];
+    /*
+    if([self.dataSource pageCount]>2){
+        [self _applyNewPageIndex:2];
+        [self goToPage:1];
+    }*/
+    
 }
 
 
@@ -241,6 +247,7 @@ typedef enum {
 
 -(void)goToPage:(NSUInteger)index{
     _pageIndex=index;
+    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.frame.size.width * index, 0.f, _scrollView.frame.size.width, _scrollView.frame.size.height) animated:NO];
 }
 
 
@@ -267,25 +274,28 @@ typedef enum {
     NSInteger newIndex=floor(fractionalPage);
     
     if(newIndex!=_pageIndex){
+         NSLog(@"INDEX HAS CHANGED %i",newIndex);
         _pageIndex=newIndex;
-        NSLog(@"INDEX HAS CHANGED %i",_pageIndex);
-        [self _applyNewPageIndex:_pageIndex];
+        [self _applyNewPageIndex:newIndex];
         [self _dump];
     }
     
     CGFloat currentIndex=(CGFloat)_pageIndex;
-    if(fractionalPage==currentIndex)
-        _trend=WATT_UnknowTrend;
-    else if(fractionalPage>=currentIndex)
-        _trend=WATT_TrendNext;
-    else
-        _trend=WATT_TrendPrevious;
     
+    if(fractionalPage==currentIndex){
+       
+        _trend=WATT_UnknowTrend;
+    }else if(fractionalPage>=currentIndex){
+        _trend=WATT_TrendNext;
+    }else{
+        _trend=WATT_TrendPrevious;
+    }
      NSLog(@"IDX : %f fractionalPage :%f %@",currentIndex,fractionalPage,_trend==WATT_TrendNext?@"NEXT":_trend==WATT_TrendPrevious?@"PREVIOUS":@"UNKNOWN");
 }
 
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)newScrollView {
+     NSLog(@"***");
     /*
     CGFloat pageWidth = _scrollView.frame.size.width;
     float fractionalPage = _scrollView.contentOffset.x / pageWidth;
@@ -338,15 +348,21 @@ typedef enum {
 #pragma mark -
 #pragma mark Debug facility
 
+
 -(void)_dump{
+    NSLog(@"%@",self);
+}
+
+-(NSString*)description{
+    NSMutableString *s=[NSMutableString string];
     for(NSString*key in _viewControllers){
-        NSLog(@"Identifier : %@",key);
         NSArray *list=[_viewControllers objectForKey:key];
+        [s appendFormat:@"Identifier : %@ [%i]",key,[list count]];
         for (UIViewController*controller in list) {
-             NSLog(@"%@",controller);
+           [s appendFormat:@"\n%@",controller];
         }
     }
-
+    return s;
 }
 
 @end
