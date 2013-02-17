@@ -112,4 +112,15 @@
 }
 
 
+#pragma mark -
+#pragma mark Debug facility
+
+
+-(NSString*)description{
+    return [NSString stringWithFormat:@"%@ %@", NSStringFromClass([self class]),_currentRequest.URL.absoluteString];
+}
+
+
+
+
 @end

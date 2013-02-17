@@ -269,8 +269,8 @@ typedef enum {
     if(newIndex!=_pageIndex){
         _pageIndex=newIndex;
         NSLog(@"INDEX HAS CHANGED %i",_pageIndex);
-        
         [self _applyNewPageIndex:_pageIndex];
+        [self _dump];
     }
     
     CGFloat currentIndex=(CGFloat)_pageIndex;
@@ -333,5 +333,20 @@ typedef enum {
     //[self _adjustViewController: atIndex:_pageIndex];
 }
 
+
+
+#pragma mark -
+#pragma mark Debug facility
+
+-(void)_dump{
+    for(NSString*key in _viewControllers){
+        NSLog(@"Identifier : %@",key);
+        NSArray *list=[_viewControllers objectForKey:key];
+        for (UIViewController*controller in list) {
+             NSLog(@"%@",controller);
+        }
+    }
+
+}
 
 @end
