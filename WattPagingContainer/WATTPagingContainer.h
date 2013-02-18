@@ -30,6 +30,13 @@
 
 #import <UIKit/UIKit.h>
 
+#ifdef __WATT_DEV_LOG // You can define __WATT_DEV_LOG to see developments logs.
+#ifndef WATTLog
+#define WATTLog(format, ... ){NSLog( @"%s%d : %@",__PRETTY_FUNCTION__,__LINE__ ,[NSString stringWithFormat:(format), ##__VA_ARGS__]);}
+#else
+#define WATTLog(format, ... ){}
+#endif
+#endif
 
 @protocol WATTPagingDataSource;
 @protocol WATTPageProtocol;

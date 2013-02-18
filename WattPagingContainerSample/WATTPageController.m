@@ -87,7 +87,7 @@
                 [self _prepareForLoading];
             }
             if(urlHasChanged){
-                [self.webView loadHTMLString:@"" baseURL:nil];
+                [self.webView stringByEvaluatingJavaScriptFromString:@"document.innerHTML = '';"];
                 _currentRequest=[NSURLRequest requestWithURL:castedModel.url];
                 [self.webView setDelegate:self];
                 [self.webView loadRequest:_currentRequest];

@@ -26,6 +26,9 @@
 //
 #import "WATTRootViewController.h"
 
+
+#define kWebDemo NO
+
 @interface WATTRootViewController ()
 
 @end
@@ -40,35 +43,35 @@
     [super viewDidLoad];
     self.dataSource=self;
     [self _loadItems]; // Load the data
-    [self populate];    
+    [self populate];
     [self goToPage:0];
 }
 
-#pragma mark - data 
+#pragma mark - data
 
 -(void)_loadItems{
     
-    if(!_listOfItem){
-        _listOfItem=[NSMutableArray array];
-        for (int i=1; i<6;i++) {
-            WATTItemModel *model=[WATTItemModel alloc];
-            model.imageName=[NSString stringWithFormat:@"nombres.00%i.jpg",i];
-            [_listOfItem addObject:model];
+    if(kWebDemo){
+        if(!_listOfItem){
+            _listOfItem=[NSMutableArray array];
+            NSURL *url=[[NSBundle mainBundle] URLForResource:@"Data" withExtension:@"plist"];
+            NSArray*list=[NSArray arrayWithContentsOfURL:url];
+            for (NSString* stringUrl in list) {
+                WATTPageModel *model=[[WATTPageModel alloc] init];
+                model.url=[NSURL URLWithString:stringUrl];
+                [_listOfItem addObject:model];
+            }
+        }
+    }else{
+        if(!_listOfItem){
+            _listOfItem=[NSMutableArray array];
+            for (int i=1; i<6;i++) {
+                WATTItemModel *model=[WATTItemModel alloc];
+                model.imageName=[NSString stringWithFormat:@"nombres.00%i.jpg",i];
+                [_listOfItem addObject:model];
+            }
         }
     }
-
- /*
-    if(!_listOfItem){
-        _listOfItem=[NSMutableArray array];
-        NSURL *url=[[NSBundle mainBundle] URLForResource:@"Data" withExtension:@"plist"];
-        NSArray*list=[NSArray arrayWithContentsOfURL:url];
-        for (NSString* stringUrl in list) {
-            WATTPageModel *model=[[WATTPageModel alloc] init];
-            model.url=[NSURL URLWithString:stringUrl];
-            [_listOfItem addObject:model];
-        }
-    }
-  */
 }
 
 -(WATTPageModel*)_modelAtIndex:(NSUInteger)index{
@@ -81,44 +84,45 @@
 
 -(UIViewController*)viewControllerForIndex:(NSUInteger)index{
     
-    // 1- We try to reuse an existing viewController
-    WATTItemViewController*controller=(WATTItemViewController*)[self dequeueViewControllerWithClass:[WATTItemViewController class]];
-    
-    // 2- If there is no view Controllers we instanciate one.
-    if(!controller)
-        controller=[[self storyboard] instantiateViewControllerWithIdentifier:@"imagePage"];
-    
-    // 3- Important : controller.view must be called once
-    // So we test it to for the initialization cycle, before to configure
-    if(controller.view){
-        // 4 - We pass the model to the view Controller.
-        [controller configureWithModel:[self _modelAtIndex:index]];
+    if(kWebDemo){
+        // 1- We try to reuse an existing viewController
+        WATTPageController*controller=(WATTPageController*)[self dequeueViewControllerWithClass:[WATTPageController class]];
+        
+        // 2- If there is no view Controllers we instanciate one.
+        if(!controller)
+            controller=[[self storyboard] instantiateViewControllerWithIdentifier:@"page"];
+        
+        // 3- Important : controller.view must be called once
+        // So we test it to for the initialization cycle, before to configure
+        if(controller.view){
+            // 4 - We pass the model to the view Controller.
+            [controller configureWithModel:[self _modelAtIndex:index]];
+        }
+        
+        return controller;
+
+    }else{
+        // 1- We try to reuse an existing viewController
+        WATTItemViewController*controller=(WATTItemViewController*)[self dequeueViewControllerWithClass:[WATTItemViewController class]];
+        
+        // 2- If there is no view Controllers we instanciate one.
+        if(!controller)
+            controller=[[self storyboard] instantiateViewControllerWithIdentifier:@"imagePage"];
+        
+        // 3- Important : controller.view must be called once
+        // So we test it to for the initialization cycle, before to configure
+        if(controller.view){
+            // 4 - We pass the model to the view Controller.
+            [controller configureWithModel:[self _modelAtIndex:index]];
+        }
+        
+        return controller;
     }
     
-    return controller;
-
-    /*
-    // 1- We try to reuse an existing viewController
-    WATTPageController*controller=(WATTPageController*)[self dequeueViewControllerWithClass:[WATTPageController class]];
-
-    // 2- If there is no view Controllers we instanciate one.
-    if(!controller)
-        controller=[[self storyboard] instantiateViewControllerWithIdentifier:@"page"];
-    
-    // 3- Important : controller.view must be called once
-    // So we test it to for the initialization cycle, before to configure
-    if(controller.view){
-        // 4 - We pass the model to the view Controller.
-        [controller configureWithModel:[self _modelAtIndex:index]];
-    }
-    
-    return controller;
-     
-    */
 }
 
 
-     
+
 -(NSUInteger)pageCount{
     return _listOfItem.count;
 }
