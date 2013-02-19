@@ -59,17 +59,20 @@
 #pragma mark - UIWebViewDelegate
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
-    WATTPageController* __weak weakSelf=self;
-    [UIView animateWithDuration:0.5f
-                          delay:0.f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         [weakSelf.webView setAlpha:1.0f];
-                         [weakSelf.activityIndicator stopAnimating];
-                         [weakSelf.activityIndicator setAlpha:0.f];
-                     } completion:^(BOOL finished) {
-                         
-                     }];
+    if(![webView.request.URL.absoluteString isEqualToString:@"about:blank"]){
+        
+        WATTPageController* __weak weakSelf=self;
+        [UIView animateWithDuration:0.5f
+                              delay:0.f
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             [weakSelf.webView setAlpha:1.0f];
+                             [weakSelf.activityIndicator stopAnimating];
+                             [weakSelf.activityIndicator setAlpha:0.f];
+                         } completion:^(BOOL finished) {
+                             
+                         }];
+    }
 }
 
 
@@ -82,12 +85,8 @@
         // we do configure the view according to the model;
         if(castedModel.url){
             BOOL urlHasChanged= (![castedModel.url.absoluteString isEqualToString:_currentRequest.URL.absoluteString]|| ! _currentRequest);
-            if([self.webView isLoading] && urlHasChanged){
-                [self.webView stopLoading];
-                [self _prepareForLoading];
-            }
             if(urlHasChanged){
-                [self.webView stringByEvaluatingJavaScriptFromString:@"document.innerHTML = '';"];
+                [self _prepareForLoading];
                 _currentRequest=[NSURLRequest requestWithURL:castedModel.url];
                 [self.webView setDelegate:self];
                 [self.webView loadRequest:_currentRequest];
@@ -105,8 +104,13 @@
 #pragma mark -
 
 - (void)_prepareForLoading{
+    [self.webView stopLoading];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    //[self.webView stringByEvaluatingJavaScriptFromString:@"document.innerHTML = '';"];
     [self.webView setAlpha:0.5f];
-    [self.webView.scrollView setBounces:NO]; // (!) 
+    [self.webView setScalesPageToFit:YES];
+    [self.webView setClipsToBounds:YES];
+    [self.webView.scrollView setBounces:NO]; // (!)
     [self.activityIndicator setAlpha:1.f];
     [self.activityIndicator startAnimating];
 }
