@@ -27,7 +27,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WATTPagingContainer.h"
+#import "WATTPagesController.h"
 #import "WATTPageModel.h"
 
 @interface WATTPageController: UIViewController<WATTPageProtocol,UIWebViewDelegate>

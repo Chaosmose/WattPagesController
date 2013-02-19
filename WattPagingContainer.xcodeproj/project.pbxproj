@@ -22,7 +22,8 @@
 		E57B236016D3BB4D00A9E977 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B235F16D3BB4D00A9E977 /* Icon@2x.png */; };
 		E57B236216D3BB6500A9E977 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B236116D3BB6500A9E977 /* Icon.png */; };
 		E57B236416D3BB6E00A9E977 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B236316D3BB6E00A9E977 /* Icon-72@2x.png */; };
-		E57B236616D3BB7100A9E977 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B236516D3BB7100A9E977 /* Icon-72.png */; };
+		E5CABF3916D3E313004ED24D /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = E5CABF3816D3E313004ED24D /* Icon-72.png */; };
+		E5CABF3D16D3E5A2004ED24D /* WATTPagesController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CABF3C16D3E5A2004ED24D /* WATTPagesController.m */; };
 		E5CFCF7716CFA82D00CCFE62 /* WATTPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCF7616CFA82D00CCFE62 /* WATTPageController.m */; };
 		E5CFCF7A16CFA87400CCFE62 /* WATTPageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCF7916CFA87400CCFE62 /* WATTPageModel.m */; };
 		E5CFCF7D16CFB14E00CCFE62 /* WATTRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCF7C16CFB14E00CCFE62 /* WATTRootViewController.m */; };
@@ -37,7 +38,6 @@
 		E5DC4FE116CEB47700F4D8E4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5DC4FE016CEB47700F4D8E4 /* Default@2x.png */; };
 		E5DC4FE316CEB47700F4D8E4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E5DC4FE216CEB47700F4D8E4 /* Default-568h@2x.png */; };
 		E5DC4FE616CEB47700F4D8E4 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E5DC4FE416CEB47700F4D8E4 /* MainStoryboard.storyboard */; };
-		E5DC4FF516CEB64D00F4D8E4 /* WATTPagingContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = E5DC4FF416CEB64D00F4D8E4 /* WATTPagingContainer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,7 +58,9 @@
 		E57B235F16D3BB4D00A9E977 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		E57B236116D3BB6500A9E977 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
 		E57B236316D3BB6E00A9E977 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "../Icon-72@2x.png"; sourceTree = "<group>"; };
-		E57B236516D3BB7100A9E977 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icon-72.png"; sourceTree = "<group>"; };
+		E5CABF3816D3E313004ED24D /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = SOURCE_ROOT; };
+		E5CABF3B16D3E5A2004ED24D /* WATTPagesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTPagesController.h; sourceTree = "<group>"; };
+		E5CABF3C16D3E5A2004ED24D /* WATTPagesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATTPagesController.m; sourceTree = "<group>"; };
 		E5CFCF7516CFA82D00CCFE62 /* WATTPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTPageController.h; sourceTree = "<group>"; };
 		E5CFCF7616CFA82D00CCFE62 /* WATTPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATTPageController.m; sourceTree = "<group>"; };
 		E5CFCF7816CFA87400CCFE62 /* WATTPageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTPageModel.h; sourceTree = "<group>"; };
@@ -80,8 +82,6 @@
 		E5DC4FE016CEB47700F4D8E4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../WattPagingContainerSample/Default@2x.png"; sourceTree = "<group>"; };
 		E5DC4FE216CEB47700F4D8E4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../WattPagingContainerSample/Default-568h@2x.png"; sourceTree = "<group>"; };
 		E5DC4FE516CEB47700F4D8E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		E5DC4FF316CEB64D00F4D8E4 /* WATTPagingContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTPagingContainer.h; sourceTree = "<group>"; };
-		E5DC4FF416CEB64D00F4D8E4 /* WATTPagingContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATTPagingContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,10 +139,19 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		E5CABF3A16D3E5A2004ED24D /* WattPagesController */ = {
+			isa = PBXGroup;
+			children = (
+				E5CABF3B16D3E5A2004ED24D /* WATTPagesController.h */,
+				E5CABF3C16D3E5A2004ED24D /* WATTPagesController.m */,
+			);
+			path = WattPagesController;
+			sourceTree = "<group>";
+		};
 		E5DC4FC016CEB47700F4D8E4 = {
 			isa = PBXGroup;
 			children = (
-				E5DC4FF216CEB64D00F4D8E4 /* WattPagingContainer */,
+				E5CABF3A16D3E5A2004ED24D /* WattPagesController */,
 				E5DC4FD216CEB47700F4D8E4 /* WattPagingContainerSample */,
 				E5DC4FCB16CEB47700F4D8E4 /* Frameworks */,
 				E5DC4FCA16CEB47700F4D8E4 /* Products */,
@@ -185,7 +194,7 @@
 		E5DC4FD316CEB47700F4D8E4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E57B236516D3BB7100A9E977 /* Icon-72.png */,
+				E5CABF3816D3E313004ED24D /* Icon-72.png */,
 				E57B236316D3BB6E00A9E977 /* Icon-72@2x.png */,
 				E57B236116D3BB6500A9E977 /* Icon.png */,
 				E57B235F16D3BB4D00A9E977 /* Icon@2x.png */,
@@ -198,15 +207,6 @@
 				E5DC4FE216CEB47700F4D8E4 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		E5DC4FF216CEB64D00F4D8E4 /* WattPagingContainer */ = {
-			isa = PBXGroup;
-			children = (
-				E5DC4FF316CEB64D00F4D8E4 /* WATTPagingContainer.h */,
-				E5DC4FF416CEB64D00F4D8E4 /* WATTPagingContainer.m */,
-			);
-			path = WattPagingContainer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,7 +280,7 @@
 				E57B236016D3BB4D00A9E977 /* Icon@2x.png in Resources */,
 				E57B236216D3BB6500A9E977 /* Icon.png in Resources */,
 				E57B236416D3BB6E00A9E977 /* Icon-72@2x.png in Resources */,
-				E57B236616D3BB7100A9E977 /* Icon-72.png in Resources */,
+				E5CABF3916D3E313004ED24D /* Icon-72.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,12 +293,12 @@
 			files = (
 				E5DC4FD916CEB47700F4D8E4 /* main.m in Sources */,
 				E5DC4FDD16CEB47700F4D8E4 /* WATTAppDelegate.m in Sources */,
-				E5DC4FF516CEB64D00F4D8E4 /* WATTPagingContainer.m in Sources */,
 				E5CFCF7716CFA82D00CCFE62 /* WATTPageController.m in Sources */,
 				E5CFCF7A16CFA87400CCFE62 /* WATTPageModel.m in Sources */,
 				E5CFCF7D16CFB14E00CCFE62 /* WATTRootViewController.m in Sources */,
 				E572206C16D141D0002F07C5 /* WATTItemViewController.m in Sources */,
 				E572206F16D141F8002F07C5 /* WATTItemModel.m in Sources */,
+				E5CABF3D16D3E5A2004ED24D /* WATTPagesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,13 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <array>
-	<string>https://twitter.com</string>
-	<string>http://www.facebook.com/</string>
-	<string>http://pereira-da-silva.com</string>
-	<string>http://secouchermoinsbete.fr</string>
-	<string>http://jonctions.com</string>
-	<string>http://raffut.com</string>
-	<string>http://goo.gl/5Tfwo</string>
 	<string>https://github.com/benoit-pereira-da-silva</string>
+	<string>http://goo.gl/5Tfwo</string>
+	<string>http://pereira-da-silva.com</string>
+	<string>http://jonctions.com</string>
+	<string>http://secouchermoinsbete.fr</string>
 </array>
 </plist>

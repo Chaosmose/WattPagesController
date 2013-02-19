@@ -26,12 +26,12 @@
 // THE SOFTWARE.
 //
 
-#import "WATTPagingContainer.h"
+#import "WATTPagesController.h"
 #import "WATTPageController.h"
 #import "WATTPageModel.h"
 #import "WATTItemViewController.h"
 #import "WATTItemModel.h"
 
-@interface WATTRootViewController : WATTPagingContainer<WATTPagingDataSource>
+@interface WATTRootViewController : WATTPagesController<WATTPagingDataSource>
 
 @end

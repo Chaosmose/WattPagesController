@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WATTPagingContainer.h"
+#import "WATTPagesController.h"
 #import "WATTItemModel.h"
 
 @interface WATTItemViewController : UIViewController<WATTPageProtocol>

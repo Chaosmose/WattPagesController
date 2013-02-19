@@ -27,8 +27,6 @@
 #import "WATTRootViewController.h"
 
 
-#define kWebDemo NO
-
 @interface WATTRootViewController ()
 
 @end
@@ -54,36 +52,26 @@
 
 -(void)_loadItems{
     
-    if(kWebDemo){
-        
-        // Web demo we load urls from a plist
-        
-        if(!_listOfItem){
-            _listOfItem=[NSMutableArray array];
-            NSURL *url=[[NSBundle mainBundle] URLForResource:@"Data" withExtension:@"plist"];
-            NSArray*list=[NSArray arrayWithContentsOfURL:url];
-            for (NSString* stringUrl in list) {
-                WATTPageModel *model=[[WATTPageModel alloc] init];
-                model.url=[NSURL URLWithString:stringUrl];
-                [_listOfItem addObject:model];
-            }
+    if(!_listOfItem){
+        _listOfItem=[NSMutableArray array];
+                
+        for (int i=0; i<5;i++) {
+            WATTItemModel *model=[WATTItemModel alloc];
+            model.imageName=[NSString stringWithFormat:@"nombres.00%i.jpg",i];
+            [_listOfItem addObject:model];
         }
-    }else{
         
-        // Image demo we instanciate the models
-        
-        if(!_listOfItem){
-            _listOfItem=[NSMutableArray array];
-            for (int i=0; i<5;i++) {
-                WATTItemModel *model=[WATTItemModel alloc];
-                model.imageName=[NSString stringWithFormat:@"nombres.00%i.jpg",i];
-                [_listOfItem addObject:model];
-            }
+        NSURL *url=[[NSBundle mainBundle] URLForResource:@"Data" withExtension:@"plist"];
+        NSArray*list=[NSArray arrayWithContentsOfURL:url];
+        for (NSString* stringUrl in list) {
+            WATTPageModel *model=[[WATTPageModel alloc] init];
+            model.url=[NSURL URLWithString:stringUrl];
+            [_listOfItem addObject:model];
         }
     }
 }
 
--(WATTPageModel*)_modelAtIndex:(NSUInteger)index{
+-(id)_modelAtIndex:(NSUInteger)index{
     return [_listOfItem objectAtIndex:index];
 }
 
@@ -93,24 +81,9 @@
 
 -(UIViewController*)viewControllerForIndex:(NSUInteger)index{
     
-    if(kWebDemo){
-        // 1- We try to reuse an existing viewController
-        WATTPageController*controller=(WATTPageController*)[self dequeueViewControllerWithClass:[WATTPageController class]];
+    
+    if([[self _modelAtIndex:index] isKindOfClass:[WATTItemModel class]]){
         
-        // 2- If there is no view Controllers we instanciate one.
-        if(!controller)
-            controller=[[self storyboard] instantiateViewControllerWithIdentifier:@"page"];
-        
-        // 3- Important : controller.view must be called once
-        // So we test it to for the initialization cycle, before to configure
-        if(controller.view){
-            // 4 - We pass the model to the view Controller.
-            [controller configureWithModel:[self _modelAtIndex:index]];
-        }
-        
-        return controller;
-
-    }else{
         // 1- We try to reuse an existing viewController
         WATTItemViewController*controller=(WATTItemViewController*)[self dequeueViewControllerWithClass:[WATTItemViewController class]];
         
@@ -128,6 +101,26 @@
         return controller;
     }
     
+    if([[self _modelAtIndex:index] isKindOfClass:[WATTPageModel class]]){
+        
+        // 1- We try to reuse an existing viewController
+        WATTPageController*controller=(WATTPageController*)[self dequeueViewControllerWithClass:[WATTPageController class]];
+        
+        // 2- If there is no view Controllers we instanciate one.
+        if(!controller)
+            controller=[[self storyboard] instantiateViewControllerWithIdentifier:@"page"];
+        
+        // 3- Important : controller.view must be called once
+        // So we test it to for the initialization cycle, before to configure
+        if(controller.view){
+            // 4 - We pass the model to the view Controller.
+            [controller configureWithModel:[self _modelAtIndex:index]];
+        }
+        return controller;
+        
+    }
+    
+    return nil; 
 }
 
 
