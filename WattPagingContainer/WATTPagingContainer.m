@@ -25,13 +25,6 @@
 //
 
 
-typedef enum {
-    WATT_IsStable,
-    WATT_TrendNext,
-    WATT_TrendPrevious
-} WATTMovementTrend;
-
-
 #import "WATTPagingContainer.h"
 
 @interface WATTPagingContainer ()
@@ -51,9 +44,6 @@ typedef enum {
     
     NSUInteger              _futureIndex; // The predictible next index.
     
-    // For future extensions
-    WATTMovementTrend       _scrollingTrend;      // Reflects the current scrolling trend
-    NSUInteger              _bufferSize;          // This variable will allow perfomance tunning 2 is the minima
     
 }
 
@@ -65,9 +55,7 @@ typedef enum {
     
     _viewControllers=[NSMutableDictionary dictionary];
     _indexes=[NSMutableArray array];
-    _scrollingTrend=WATT_IsStable;
-    _bufferSize=2;//We currently use only 2 view controllers as our pages are full screen
-    _pagingEnabled=YES;
+       _pagingEnabled=YES;
     _bounces=NO;
     
     // Set up the main view
@@ -360,34 +348,14 @@ typedef enum {
     }else{
         fractionalPage  =  _scrollView.contentOffset.y /  _scrollView.frame.size.height;
     }
-    
-    CGFloat roundedFractionalPage   =   floorf(fractionalPage); // Rounded down floorf() Rounded up ceilf()
-    
-    WATTMovementTrend currentTrend;
-    if( fractionalPage == roundedFractionalPage ){
-        currentTrend=WATT_IsStable;
-    }else if(fractionalPage>_pageIndex){
-        currentTrend=WATT_TrendNext;
-    }else{
-        currentTrend=WATT_TrendPrevious;
-    }
-    _scrollingTrend=currentTrend;
-    
-    if(_scrollingTrend!=WATT_IsStable){
-    }
-    
-    // May be an optimization could be  possible in certain situation
-    //it seems that some unusefull index are prepared.
-    
+
     [self _computePageIndexWithPageIndex:fractionalPage];
     
     if(![self _pageIsPreparedAt:_pageIndex])
         [self _preparePageAtIndex:_pageIndex];
     if(![self _pageIsPreparedAt:_futureIndex])
         [self _preparePageAtIndex:_futureIndex];
-    
-    
-    
+
 }
 
 
@@ -395,28 +363,19 @@ typedef enum {
     
     if(page<0.f)
         page=0.f;
-    _pageIndex=floorf(page);// Round down;
     
-    switch (_scrollingTrend) {
-        case WATT_TrendPrevious:{
-            
-            if(_pageIndex>0)
-                _futureIndex=_pageIndex-1;
-            else
-                _futureIndex=0;
-            break;
-        }
-        case WATT_TrendNext:{
-            if(_pageIndex<[self.dataSource pageCount]-1)
-                _futureIndex=_pageIndex+1;
-            break;
-        }
-        default:
-            _futureIndex=_pageIndex;
-            break;
+    NSUInteger roundedDown=(NSUInteger)floorf(page); // ceilf rounded Up 
+    _pageIndex=roundedDown;
+    
+    if(page<(CGFloat)_pageIndex){
+        _futureIndex=roundedDown;
+    }
+    if(page>(CGFloat)_pageIndex && roundedDown<[self.dataSource pageCount]-1){
+        _futureIndex=roundedDown+1;
     }
     
 }
+
 
 
 #pragma mark -
