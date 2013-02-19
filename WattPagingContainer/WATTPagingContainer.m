@@ -146,7 +146,11 @@
 
 
 -(CGRect)_referenceBounds{
-    return [[UIScreen mainScreen] applicationFrame];
+    if(self.view.superview){
+       return  self.view.superview.bounds;
+    }else{
+       return [[UIScreen mainScreen] applicationFrame];
+    }
 }
 
 -(CGRect)_adpativeReferenceBounds{
@@ -158,7 +162,11 @@
 }
 
 -(CGRect)_adaptRect:(CGRect)rect{
-    return [self _isLandscapeOrientation]?[self _rectRotate:rect]:rect;
+    if(self.view.superview){
+        return rect;
+    }else{
+        return [self _isLandscapeOrientation]?[self _rectRotate:rect]:rect;
+    }
 }
 
 
