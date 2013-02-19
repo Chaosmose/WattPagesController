@@ -24,13 +24,10 @@
 // THE SOFTWARE.
 //
 
-//  This component has been originally inspirated by Matt Gallaghers' PagingScrollViewController approach : Thank s Matt !
-//  http://www.cocoawithlove.com/2009/01/multiple-virtual-pages-in-uiscrollview.html
-
-
 #import <UIKit/UIKit.h>
 
-#ifdef __WATT_DEV_LOG // You can define __WATT_DEV_LOG to see developments logs.
+ // You can define __WATT_DEV_LOG anyware to see developments logs.
+#ifdef __WATT_DEV_LOG      
 #ifndef WATTLog
 #define WATTLog(format, ... ){NSLog( @"%s%d : %@",__PRETTY_FUNCTION__,__LINE__ ,[NSString stringWithFormat:(format), ##__VA_ARGS__]);}
 #else
@@ -42,7 +39,7 @@
 @protocol WATTPageProtocol;
 
 /**
- `WATTPagingContainer` is an opensource alternative to UIPageController (implementing page sliding & compliant with IOS5).  `WATTPagingContainer`  is a container that allows to navigate between viewControllers using virtual paging.
+ `WATTPagingContainer` is an opensource alternative to UIPageController (implementing vertical and horiontal optimal page sliding & compliant with IOS5).  `WATTPagingContainer`  is a container that allows to navigate between viewControllers using virtual paging.
  
  ## System requirements
  -IOS 5.X & more
@@ -69,7 +66,6 @@ typedef enum {
 @interface WATTPagingContainer : UIViewController<UIScrollViewDelegate>{
 }
 
-
 /**
  The current page index
  */
@@ -81,9 +77,24 @@ typedef enum {
 @property (assign,nonatomic)id<WATTPagingDataSource>dataSource;
 
 /**
- The sliding direction (NOT IMPLEMENTED YET)
+ The sliding direction
  */
 @property (assign,nonatomic)WATTSlidingDirection direction;
+
+/**
+ default YES. if YES, stop on multiples of view bounds
+ **/
+@property (assign,nonatomic)BOOL pagingEnabled;
+
+/**
+ default NO. if YES, bounces past edge of content and back again
+ **/
+@property (assign,nonatomic)BOOL bounces;
+
+/**
+ default blackColor
+ **/
+@property (strong,nonatomic)UIColor *backgroundColor;
 
 /**
   Reconfigures according to the data source.

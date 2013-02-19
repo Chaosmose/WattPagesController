@@ -26,8 +26,6 @@
 
 // http://developer.apple.com/library/ios/#featuredarticles/ViewControllerPGforiPhoneOS/CreatingCustomContainerViewControllers/CreatingCustomContainerViewControllers.html
 
-
-
 typedef enum {
     WATT_IsStable,
     WATT_TrendNext,
@@ -51,11 +49,13 @@ typedef enum {
     
     NSMutableDictionary     *_viewControllers;
     NSMutableArray          *_indexes;
+
+    NSUInteger              _futureIndex; // The predictible next index.
     
-    CGFloat                 _lastFractionalPage;   // We store the _lastFractionalPage when scrolling to determine the trend
-    WATTMovementTrend       _scrollingTrend;        // Reflects the current scrolling trend;
-    NSUInteger               _bufferSize;           // This variable will allow perfomance tunning 2 is the minima
-    NSUInteger              _futureIndex;
+    // For future extensions
+    WATTMovementTrend       _scrollingTrend;      // Reflects the current scrolling trend
+    NSUInteger              _bufferSize;          // This variable will allow perfomance tunning 2 is the minima
+ 
 }
 
 #pragma mark -
@@ -64,46 +64,42 @@ typedef enum {
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    BOOL l=[self _isLandscapeOrientation];
-    if(l){
-        // IOS 5 BUG
-        WATTLog(@"**");
-    }
-    
     _viewControllers=[NSMutableDictionary dictionary];
     _indexes=[NSMutableArray array];
     _scrollingTrend=WATT_IsStable;
-    _lastFractionalPage=0.f;
-    _bufferSize=2;              //We use only 2 view controllers as our pages are full screen.
-    
+    _bufferSize=2;//We currently use only 2 view controllers as our pages are full screen
+    _pagingEnabled=YES;
+    _bounces=NO;
     
     // Set up the main view
     [self.view setAutoresizesSubviews:YES];
     [self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
-    [self.view setBackgroundColor:[UIColor redColor]];
+    [self.view setOpaque:YES];
     [self.view setBounds:[self _adpativeReferenceBounds]];
     
     // Configure and add the scroll view
     
     _scrollView=[[UIScrollView alloc] initWithFrame:[self _adpativeReferenceBounds]];//initWithFrame:CGRectMake(10, 10, 512, 512)];
-    [_scrollView setBackgroundColor:[UIColor brownColor]];
-    [_scrollView setPagingEnabled:YES];
+    [_scrollView setBackgroundColor:[UIColor darkGrayColor]];
     [_scrollView setClipsToBounds:YES];
-    [_scrollView setBounces:NO];
+    [_scrollView setPagingEnabled:self.pagingEnabled];
+    [_scrollView setBounces:self.bounces];
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     [_scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [_scrollView setDelegate:self];
     [self.view addSubview:_scrollView];
     
+    self.backgroundColor=[UIColor blackColor];
+    
 }
-
 
 
 -(void)viewDidUnload{
     [super viewDidUnload];
     [_scrollView removeFromSuperview];
     _scrollView = nil;
+    _backgroundColor=nil;
 }
 
 
@@ -133,9 +129,27 @@ typedef enum {
     [_scrollView removeFromSuperview];
     _scrollView = nil;
     
-    
+    _backgroundColor=nil;
     
 }
+
+#pragma mark Look and feel
+
+
+-(void)setBackgroundColor:(UIColor *)backgroundColor{
+    _scrollView.backgroundColor=backgroundColor;
+    self.view=backgroundColor;
+}
+-(void)setPagingEnabled:(BOOL)pagingEnabled{
+    [_scrollView setPagingEnabled:pagingEnabled];
+    _pagingEnabled=pagingEnabled;
+}
+
+-(void)setBounces:(BOOL)bounces{
+    [_scrollView setBounces:bounces];
+    _bounces=bounces;
+}
+
 
 
 #pragma mark -
@@ -171,38 +185,37 @@ typedef enum {
 #pragma mark -
 #pragma mark
 
-
 - (void)_preparePageAtIndex:(NSUInteger)newIndex{
-    
-    if([_indexes count]>newIndex){
-        if([_indexes objectAtIndex:newIndex] && [[_indexes objectAtIndex:newIndex]class]!=[NSNull class]){
-            // There is already a view controller prepared for this index
-            return ;
+    // Let's be parcimonious
+    // We do prepare only if necessary
+    // As it produces a view controller reconfiguration.
+    if(![self _pageIsPreparedAt:newIndex]){
+        if (! (newIndex >= [self.dataSource pageCount]) ){
+            
+            UIViewController * __weak controller=[self.dataSource viewControllerForIndex:newIndex];
+            NSString *identifier=NSStringFromClass([controller class]);
+            
+            // Update the registry
+            [self _register:controller
+                    atIndex:newIndex];
+            
+            // Add the view controller if ncessary
+            [self _addIfNecessaryViewController:controller
+                                 withIdentifier:identifier];
+            
+            // Position in the scrollview
+            [self _positionViewFrom:controller
+                            atIndex:newIndex];
+
+            WATTLog(@"Preparing index : %i [%@] %@",newIndex,controller,_indexes);
+            
         }
+    }else{
+        WATTLog(@"%@ %@ %i",[_indexes objectAtIndex:newIndex],@" is Ready to use at ",newIndex);
+        return ;
     }
-    
-    if(newIndex>[self.dataSource pageCount]){
-        WATTLog(@"BUG");
-    }
-    
-    UIViewController * __weak controller=[self.dataSource viewControllerForIndex:newIndex];
-    NSString *identifier=NSStringFromClass([controller class]);
-    
-    [self _register:controller atIndex:newIndex];
-    
-    [self _addIfNecessaryViewController:controller
-                         withIdentifier:identifier];
-    
-    if (! (newIndex >= [self.dataSource pageCount]) ){
-        [self _positionViewFrom:controller
-                        atIndex:newIndex];
-    }
-    
-#ifdef __WATT_DEV_LOG
-    WATTLog(@"Preparing index : %i [%i] %@",newIndex,[self _countViewControllers],_indexes);
-#endif
-    
 }
+
 
 
 // We add a we controller once only
@@ -229,18 +242,20 @@ typedef enum {
 -(void)_positionViewFrom:(UIViewController*)controller
                  atIndex:(NSUInteger)index{
     CGRect pageFrame = [self _adpativeReferenceBounds];
-    pageFrame.origin.y = 0;
-    CGFloat x=[self _adpativeReferenceBounds].size.width * (CGFloat)index;
-    pageFrame.origin.x = x;
+    if(self.direction==WATTSlidingDirectionHorizontal){
+        pageFrame.origin.y = 0;
+        CGFloat x=[self _adpativeReferenceBounds].size.width * (CGFloat)index;
+        pageFrame.origin.x = x;
+    }else{
+        pageFrame.origin.x = 0;
+        CGFloat y=[self _adpativeReferenceBounds].size.height * (CGFloat)index;
+        pageFrame.origin.y = y;
+    }
     controller.view.frame = pageFrame;
-    
 }
-
-
 
 -(void)_register:(UIViewController*)viewController
          atIndex:(NSUInteger)index {
-    WATTLog(@"REGISTERING %@ at index : %i",viewController,index);
     NSUInteger idx=[_indexes indexOfObject:viewController];
     if(idx!=index){
         if(idx!=NSNotFound){
@@ -250,15 +265,13 @@ typedef enum {
         }
         //We place a reference viewController at its new index.
         if(index>=[_indexes count]){
-            [_indexes insertObject:viewController
-                           atIndex:index];
+            [_indexes addObject:viewController];
         }else{
             [_indexes replaceObjectAtIndex:index
                                 withObject:viewController];
         }
     }
 }
-
 
 -(UIViewController*)dequeueViewControllerWithClass:(Class)theClass{
     NSString*identifier=NSStringFromClass(theClass);
@@ -277,23 +290,45 @@ typedef enum {
     return nil;
 }
 
+-(BOOL)_pageIsPreparedAt:(NSUInteger)index{
+    if([_indexes count]>index){
+        if([_indexes objectAtIndex:index] &&
+           [[_indexes objectAtIndex:index]class]!=[NSNull class]){
+            return YES;
+        }
+    }
+    return NO;
+}
+
+
+-(BOOL)_pageIsVisibleAt:(NSUInteger)index{
+    if([self _pageIsPreparedAt:index]){
+        UIViewController *__weak child=(UIViewController*)[_indexes objectAtIndex:index];
+        return CGRectIntersectsRect(_scrollView.bounds,child.view.frame);
+    }
+    return NO;
+}
+
+
 
 
 #pragma mark -
 
 -(void)populate{
     
-    NSInteger widthCount = [self.dataSource pageCount];
-    if (widthCount == 0){
-        widthCount = 1;
+    NSInteger minPageCount = [self.dataSource pageCount];
+    if (minPageCount == 0){
+        minPageCount = 1;
     }
-    
-    _scrollView.contentSize =CGSizeMake(_scrollView.frame.size.width * widthCount,_scrollView.frame.size.height);
+    if(self.direction==WATTSlidingDirectionHorizontal){
+        _scrollView.contentSize =CGSizeMake(_scrollView.frame.size.width * minPageCount,_scrollView.frame.size.height);
+    }else{
+        _scrollView.contentSize =CGSizeMake(_scrollView.frame.size.width,_scrollView.frame.size.height* minPageCount);
+    }
     _scrollView.contentOffset = CGPointMake(0, 0);
     
     _pageIndex=_futureIndex=0;
     [self _preparePageAtIndex:0];
-    
 }
 
 
@@ -320,44 +355,55 @@ typedef enum {
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender{
     
-    CGFloat pageWidth               =   _scrollView.frame.size.width;
-    CGFloat fractionalPage          =   _scrollView.contentOffset.x / pageWidth;
+    CGFloat fractionalPage;
+     if(self.direction==WATTSlidingDirectionHorizontal){
+         fractionalPage  =  _scrollView.contentOffset.x /  _scrollView.frame.size.width;
+     }else{
+         fractionalPage  =  _scrollView.contentOffset.y /  _scrollView.frame.size.height;
+     }
+    
     CGFloat roundedFractionalPage   =   roundf(fractionalPage);
     
-    WATTMovementTrend currentTrend;
-    
+    WATTMovementTrend currentTrend; 
     if( fractionalPage == roundedFractionalPage ){
         currentTrend=WATT_IsStable;
-    }else if(fractionalPage>_lastFractionalPage){
+    }else if(fractionalPage>_pageIndex){
         currentTrend=WATT_TrendNext;
     }else{
         currentTrend=WATT_TrendPrevious;
     }
-    
-    _lastFractionalPage=fractionalPage;
     BOOL trendHasChanged = (_scrollingTrend != currentTrend);
     _scrollingTrend=currentTrend;
     
     if(_scrollingTrend==WATT_IsStable){
-       _pageIndex=roundedFractionalPage;
+        _pageIndex=roundedFractionalPage;
         WATTLog(@"Page has changed : %i",_pageIndex);
     }
     
+    //WATTLog(@"%f",roundedFractionalPage);
     if(trendHasChanged && _scrollingTrend!=WATT_IsStable){
-        // Future index is an NSUInteger so we must keep a positive value.
+    
+        // Future index is an NSUInteger
+        // so we need a positive value.
+        // casting a negative value to NSUInteger sets it to it max value.
+        NSUInteger complementaryIndex=_pageIndex;
         if(_scrollingTrend==WATT_TrendPrevious){
             if(_pageIndex>0){
                 _futureIndex=_pageIndex-1;
+                complementaryIndex=_pageIndex+1;
             }else{
                 _futureIndex=0;
             }
         }else{
-            _futureIndex=_pageIndex+1;
+            if(_pageIndex<[self.dataSource pageCount]-1){
+                _futureIndex=_pageIndex+1;
+                complementaryIndex=_pageIndex-1;
+            }
         }
+        //WATTLog(@"%f _pageIndex %i _futureIndex %i %@",_lastFractionalPage,_pageIndex,_futureIndex,_scrollingTrend==WATT_TrendNext?@"NEXT":_scrollingTrend==WATT_TrendPrevious?@"PREVIOUS":@"STABILIZED");
         [self _preparePageAtIndex:_futureIndex];
     }
-    
-    //WATTLog(@"%f _pageIndex %i _futureIndex %i %@",_lastFractionalPage,_pageIndex,_futureIndex,_scrollingTrend==WATT_TrendNext?@"NEXT":_scrollingTrend==WATT_TrendPrevious?@"PREVIOUS":@"STABILIZED");
+
 }
 
 
@@ -417,6 +463,5 @@ typedef enum {
     }
     return counter;
 }
-
 
 @end

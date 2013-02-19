@@ -42,6 +42,8 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     self.dataSource=self;
+    self.direction=WATTSlidingDirectionHorizontal;
+    self.bounces=YES;
     [self _loadItems]; // Load the data
     [self populate];
     [self goToPage:0];
