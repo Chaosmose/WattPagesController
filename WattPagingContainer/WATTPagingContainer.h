@@ -103,19 +103,21 @@ typedef enum {
 
 /**
  Position without any transition to the given index
- @param index T
+ @param index 
+ @param animated if YES the transition will be animated
  */
--(void)goToPage:(NSUInteger)index;
+-(void)goToPage:(NSUInteger)index
+       animated:(BOOL)animated;
 
 /**
  Transition to the next page if any
  */
--(void)nextPage;
+-(void)nextPageAnimated:(BOOL)animated;
 
 /**
  Transition to the previous page if any
  */
--(void)previousPage;
+-(void)previousPageAnimated:(BOOL)animated;
 
 /**
  Returns a viewController that is off screen, to be reconfigured

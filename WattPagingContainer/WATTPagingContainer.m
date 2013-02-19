@@ -319,22 +319,25 @@
 }
 
 
--(void)nextPage{
+-(void)nextPageAnimated:(BOOL)animated;{
     _pageIndex++;
-    [self goToPage:_pageIndex];
+    [self goToPage:_pageIndex animated:animated];
 }
 
 
--(void)previousPage{
+-(void)previousPageAnimated:(BOOL)animated{
     _pageIndex++;
-    [self goToPage:_pageIndex];
+    [self goToPage:_pageIndex animated:animated];
 }
 
 
--(void)goToPage:(NSUInteger)index{
+-(void)goToPage:(NSUInteger)index
+       animated:(BOOL)animated{
     _pageIndex=index;
     _futureIndex=index;
-    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.frame.size.width * index, 0.f, _scrollView.frame.size.width, _scrollView.frame.size.height) animated:NO];
+    [self _preparePageAtIndex:index];
+    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.frame.size.width * index, 0.f, _scrollView.frame.size.width, _scrollView.frame.size.height)
+                            animated:animated];
 }
 
 

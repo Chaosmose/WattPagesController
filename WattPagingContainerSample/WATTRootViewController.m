@@ -47,7 +47,7 @@
     self.bounces=YES;
     [self _loadItems]; // Load the data
     [self populate];
-    [self goToPage:0];
+    [self goToPage:2 animated:YES];
 }
 
 #pragma mark - data
