@@ -39,11 +39,11 @@
 @protocol WATTPageProtocol;
 
 /**
- `WATTPagingContainer` is an opensource alternative to UIPageController (implementing vertical and horiontal optimal page sliding & compliant with IOS5).  `WATTPagingContainer`  is a container that allows to navigate between viewControllers using virtual paging.
+ `WATTPagingContainer` is an opensource alternative to UIPageController (implementing vertical and horiontal optimal page sliding & compliant with IOS>=5.0).  `WATTPagingContainer`  is a container that allows to navigate between viewControllers using virtual paging.
  
  ## System requirements
- -IOS 5.X & more
- -ARC 
+ -IOS >= 5.0 
+ -ARC
  
  ## Usage 
  

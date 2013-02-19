@@ -24,7 +24,6 @@
 // THE SOFTWARE.
 //
 
-// http://developer.apple.com/library/ios/#featuredarticles/ViewControllerPGforiPhoneOS/CreatingCustomContainerViewControllers/CreatingCustomContainerViewControllers.html
 
 typedef enum {
     WATT_IsStable,
@@ -90,7 +89,7 @@ typedef enum {
     [_scrollView setDelegate:self];
     [self.view addSubview:_scrollView];
     
-    self.backgroundColor=[UIColor blackColor];
+    self.backgroundColor=[UIColor blackColor]; // We setup to black by default
     
 }
 
@@ -138,8 +137,10 @@ typedef enum {
 
 -(void)setBackgroundColor:(UIColor *)backgroundColor{
     _scrollView.backgroundColor=backgroundColor;
-    self.view=backgroundColor;
+    [self.view setBackgroundColor:backgroundColor];
+    _backgroundColor=backgroundColor;
 }
+
 -(void)setPagingEnabled:(BOOL)pagingEnabled{
     [_scrollView setPagingEnabled:pagingEnabled];
     _pagingEnabled=pagingEnabled;
@@ -215,8 +216,6 @@ typedef enum {
         return ;
     }
 }
-
-
 
 // We add a we controller once only
 -(void)_addIfNecessaryViewController:(UIViewController*)controller
@@ -362,7 +361,10 @@ typedef enum {
          fractionalPage  =  _scrollView.contentOffset.y /  _scrollView.frame.size.height;
      }
     
-    CGFloat roundedFractionalPage   =   roundf(fractionalPage);
+    CGFloat roundedFractionalPage   =   floorf(fractionalPage); // Rounded down floorf() Rounded up ceilf()
+    
+    WATTLog(@"_pageIndex:%i fractionalPage:%f",_pageIndex,fractionalPage);
+
     
     WATTMovementTrend currentTrend; 
     if( fractionalPage == roundedFractionalPage ){
@@ -377,7 +379,7 @@ typedef enum {
     
     if(_scrollingTrend==WATT_IsStable){
         _pageIndex=roundedFractionalPage;
-        WATTLog(@"Page has changed : %i",_pageIndex);
+        //WATTLog(@"Page is stable at _pageIndex:%i fractionalPage:%f",_pageIndex,fractionalPage);
     }
     
     //WATTLog(@"%f",roundedFractionalPage);
@@ -400,10 +402,40 @@ typedef enum {
                 complementaryIndex=_pageIndex-1;
             }
         }
-        //WATTLog(@"%f _pageIndex %i _futureIndex %i %@",_lastFractionalPage,_pageIndex,_futureIndex,_scrollingTrend==WATT_TrendNext?@"NEXT":_scrollingTrend==WATT_TrendPrevious?@"PREVIOUS":@"STABILIZED");
+        
+       // WATTLog(@"fractionalPage:%f roundedFractionalPage:%f _pageIndex:%i _futureIndex:%i trend:%@",fractionalPage,roundedFractionalPage,_pageIndex,_futureIndex,_scrollingTrend==WATT_TrendNext?@"NEXT":@"PREVIOUS");
         [self _preparePageAtIndex:_futureIndex];
     }
 
+}
+
+
+#pragma mark -
+#pragma mark Debug facility
+
+
+-(NSString*)description{
+    NSMutableString *s=[NSMutableString string];
+    for(NSString*key in _viewControllers){
+        NSArray *list=[_viewControllers objectForKey:key];
+        [s appendFormat:@"Identifier : %@ [%i]",key,[list count]];
+        for (UIViewController*controller in list) {
+            [s appendFormat:@"\n%@",controller];
+        }
+    }
+    return s;
+}
+
+
+-(NSInteger)_countViewControllers{
+    NSInteger counter=0;
+    for(NSString*key in _viewControllers){
+        NSArray *list=[_viewControllers objectForKey:key];
+        for (UIViewController*controller in list) {
+            counter++;
+        }
+    }
+    return counter;
 }
 
 
@@ -435,33 +467,5 @@ typedef enum {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
-
-#pragma mark -
-#pragma mark Debug facility
-
-
--(NSString*)description{
-    NSMutableString *s=[NSMutableString string];
-    for(NSString*key in _viewControllers){
-        NSArray *list=[_viewControllers objectForKey:key];
-        [s appendFormat:@"Identifier : %@ [%i]",key,[list count]];
-        for (UIViewController*controller in list) {
-            [s appendFormat:@"\n%@",controller];
-        }
-    }
-    return s;
-}
-
-
--(NSInteger)_countViewControllers{
-    NSInteger counter=0;
-    for(NSString*key in _viewControllers){
-        NSArray *list=[_viewControllers objectForKey:key];
-        for (UIViewController*controller in list) {
-            counter++;
-        }
-    }
-    return counter;
-}
 
 @end

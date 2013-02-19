@@ -43,6 +43,7 @@
     [super viewDidLoad];
     self.dataSource=self;
     self.direction=WATTSlidingDirectionHorizontal;
+    self.backgroundColor=[UIColor darkGrayColor];
     self.bounces=YES;
     [self _loadItems]; // Load the data
     [self populate];
@@ -54,6 +55,9 @@
 -(void)_loadItems{
     
     if(kWebDemo){
+        
+        // Web demo we load urls from a plist
+        
         if(!_listOfItem){
             _listOfItem=[NSMutableArray array];
             NSURL *url=[[NSBundle mainBundle] URLForResource:@"Data" withExtension:@"plist"];
@@ -65,9 +69,12 @@
             }
         }
     }else{
+        
+        // Image demo we instanciate the models
+        
         if(!_listOfItem){
             _listOfItem=[NSMutableArray array];
-            for (int i=1; i<6;i++) {
+            for (int i=0; i<5;i++) {
                 WATTItemModel *model=[WATTItemModel alloc];
                 model.imageName=[NSString stringWithFormat:@"nombres.00%i.jpg",i];
                 [_listOfItem addObject:model];
@@ -122,7 +129,6 @@
     }
     
 }
-
 
 
 -(NSUInteger)pageCount{
