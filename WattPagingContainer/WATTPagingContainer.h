@@ -28,11 +28,9 @@
 
  // You can define __WATT_DEV_LOG anyware to see developments logs.
 #ifdef __WATT_DEV_LOG      
-#ifndef WATTLog
 #define WATTLog(format, ... ){NSLog( @"%s%d : %@",__PRETTY_FUNCTION__,__LINE__ ,[NSString stringWithFormat:(format), ##__VA_ARGS__]);}
 #else
 #define WATTLog(format, ... ){}
-#endif
 #endif
 
 @protocol WATTPagingDataSource;
