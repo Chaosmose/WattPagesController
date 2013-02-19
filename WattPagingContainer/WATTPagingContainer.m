@@ -55,7 +55,7 @@
     
     _viewControllers=[NSMutableDictionary dictionary];
     _indexes=[NSMutableArray array];
-       _pagingEnabled=YES;
+    _pagingEnabled=YES;
     _bounces=NO;
     
     // Set up the main view
@@ -146,10 +146,10 @@
 
 
 -(CGRect)_referenceBounds{
-    if(self.view.superview){
-       return  self.view.superview.bounds;
+    if(self.view.superview && ![self.view.superview isMemberOfClass:[UIWindow class]]){
+        return  self.view.superview.bounds;
     }else{
-       return [[UIScreen mainScreen] applicationFrame];
+        return [[UIScreen mainScreen] applicationFrame];
     }
 }
 
@@ -162,13 +162,12 @@
 }
 
 -(CGRect)_adaptRect:(CGRect)rect{
-    if(self.view.superview){
+    if(self.view.superview && ![self.view.superview isMemberOfClass:[UIWindow class]]){
         return rect;
     }else{
         return [self _isLandscapeOrientation]?[self _rectRotate:rect]:rect;
     }
 }
-
 
 -(BOOL)_isLandscapeOrientation{
     return UIDeviceOrientationIsLandscape([self _currentOrientation]);
@@ -310,21 +309,26 @@
 #pragma mark -
 
 -(void)populate{
-    
+    _scrollView.contentSize=[self _scrollViewContentSize];
+    _scrollView.contentOffset = CGPointMake(0, 0);
+    _pageIndex=_futureIndex=0;
+    [self _preparePageAtIndex:0];
+}
+
+
+-(CGSize)_scrollViewContentSize{
     NSInteger minPageCount = [self.dataSource pageCount];
     if (minPageCount == 0){
         minPageCount = 1;
     }
     if(self.direction==WATTSlidingDirectionHorizontal){
-        _scrollView.contentSize =CGSizeMake(_scrollView.frame.size.width * minPageCount,_scrollView.frame.size.height);
+        return CGSizeMake(_scrollView.frame.size.width * minPageCount,_scrollView.frame.size.height);
     }else{
-        _scrollView.contentSize =CGSizeMake(_scrollView.frame.size.width,_scrollView.frame.size.height* minPageCount);
+        return CGSizeMake(_scrollView.frame.size.width,_scrollView.frame.size.height* minPageCount);
     }
-    _scrollView.contentOffset = CGPointMake(0, 0);
-    
-    _pageIndex=_futureIndex=0;
-    [self _preparePageAtIndex:0];
 }
+
+
 
 
 -(void)nextPageAnimated:(BOOL)animated;{
@@ -344,7 +348,11 @@
     _pageIndex=index;
     _futureIndex=index;
     [self _preparePageAtIndex:index];
-    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.frame.size.width * index, 0.f, _scrollView.frame.size.width, _scrollView.frame.size.height)
+    BOOL horizontal=(self.direction==WATTSlidingDirectionHorizontal);
+    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.frame.size.width * ((horizontal)?index:0.f),
+                                                _scrollView.frame.size.height * ((!horizontal)?index:0.f),
+                                                _scrollView.frame.size.width,
+                                                _scrollView.frame.size.height)
                             animated:animated];
 }
 
@@ -359,14 +367,14 @@
     }else{
         fractionalPage  =  _scrollView.contentOffset.y /  _scrollView.frame.size.height;
     }
-
+    
     [self _computePageIndexWithPageIndex:fractionalPage];
     
     if(![self _pageIsPreparedAt:_pageIndex])
         [self _preparePageAtIndex:_pageIndex];
     if(![self _pageIsPreparedAt:_futureIndex])
         [self _preparePageAtIndex:_futureIndex];
-
+    
 }
 
 
@@ -375,7 +383,7 @@
     if(page<0.f)
         page=0.f;
     
-    NSUInteger roundedDown=(NSUInteger)floorf(page); // ceilf rounded Up 
+    NSUInteger roundedDown=(NSUInteger)floorf(page); // ceilf rounded Up
     _pageIndex=roundedDown;
     
     if(page<(CGFloat)_pageIndex){
@@ -444,6 +452,23 @@
 
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    
+    CGSize newContentSize=[self _scrollViewContentSize];
+    // If the contentsize should change
+    if(!CGSizeEqualToSize(newContentSize,  _scrollView.contentSize)){
+        // Reset the scroll view content size
+        _scrollView.contentSize=newContentSize;
+        // And reposition the controllers
+        NSUInteger i=0;
+        for (UIViewController *controller in _indexes) {
+            if(controller && ![controller isMemberOfClass:[NSNull class]]){
+                [self _positionViewFrom:controller
+                                atIndex:i];
+            }
+            i++;
+        }
+        [self goToPage:_pageIndex animated:NO];
+    }
 }
 
 

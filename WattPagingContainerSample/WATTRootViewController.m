@@ -43,7 +43,7 @@
     [super viewDidLoad];
     self.dataSource=self;
     self.direction=WATTSlidingDirectionHorizontal;
-    self.backgroundColor=[UIColor darkGrayColor];
+    self.backgroundColor=[UIColor blackColor];
     self.bounces=YES;
     [self _loadItems]; // Load the data
     [self populate];
