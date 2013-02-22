@@ -131,6 +131,13 @@ typedef enum {
  */
 -(UIViewController*)currentViewController;
 
+
+/**
+ Does nothing but can be overriden to perform an action on index change.
+ @param pageIndex the new page index
+ */
+-(void)pageIndexDidChange:(NSUInteger)pageIndex;
+
 @end
 
 

@@ -334,23 +334,29 @@
 
 -(void)nextPageAnimated:(BOOL)animated;{
     if([self.dataSource pageCount]>0){
-        _pageIndex++;
-        [self goToPage:_pageIndex animated:animated];
+        [self goToPage:_pageIndex+1 animated:animated];
     }
 }
 
 
 -(void)previousPageAnimated:(BOOL)animated{
     if([self.dataSource pageCount]>0){
-        _pageIndex--;
-        [self goToPage:_pageIndex animated:animated];
+        [self goToPage:_pageIndex-1 animated:animated];
     }
+}
+
+
+-(void)pageIndexDidChange:(NSUInteger)pageIndex{
+    // No implementation
 }
 
 
 -(void)goToPage:(NSUInteger)index
        animated:(BOOL)animated{
+    if(_pageIndex!=index){
     _pageIndex=index;
+    [self pageIndexDidChange:_pageIndex];
+        
     _futureIndex=index;
     [self _preparePageAtIndex:index];
     BOOL horizontal=(self.direction==WATTSlidingDirectionHorizontal);
@@ -359,6 +365,7 @@
                                                 _scrollView.frame.size.width,
                                                 _scrollView.frame.size.height)
                             animated:animated];
+    }
 }
 
 
@@ -398,8 +405,10 @@
         page=0.f;
     
     NSUInteger roundedDown=(NSUInteger)floorf(page); // ceilf rounded Up
-    _pageIndex=roundedDown;
-    
+    if(_pageIndex!=roundedDown){
+        _pageIndex=roundedDown;
+        [self pageIndexDidChange:_pageIndex];
+    }
     if(page<(CGFloat)_pageIndex){
         _futureIndex=roundedDown;
     }
