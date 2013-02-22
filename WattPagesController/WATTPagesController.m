@@ -339,7 +339,7 @@
 
 
 -(void)previousPageAnimated:(BOOL)animated{
-    _pageIndex++;
+    _pageIndex--;
     [self goToPage:_pageIndex animated:animated];
 }
 
