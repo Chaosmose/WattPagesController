@@ -1,6 +1,7 @@
 //
-//  WATTPageModel.m
+//  WATTPageViewController.h
 //  WattPagingContainer
+//
 //
 //  Created by Benoit Pereira da Silva on 15/02/13.
 //  Copyright (c) 2013 https://github.com/benoit-pereira-da-silva/
@@ -23,10 +24,15 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+//
 
+#import <UIKit/UIKit.h>
+#import "WATTPagesController.h"
+#import "WATTWebModel.h"
 
-#import "WATTPageModel.h"
+@interface WATTWebviewController: UIViewController<WATTPageProtocol,UIWebViewDelegate>
 
-@implementation WATTPageModel
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end

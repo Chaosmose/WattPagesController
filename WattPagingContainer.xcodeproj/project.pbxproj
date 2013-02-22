@@ -24,8 +24,8 @@
 		E57B236416D3BB6E00A9E977 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E57B236316D3BB6E00A9E977 /* Icon-72@2x.png */; };
 		E5CABF3916D3E313004ED24D /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = E5CABF3816D3E313004ED24D /* Icon-72.png */; };
 		E5CABF3D16D3E5A2004ED24D /* WATTPagesController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CABF3C16D3E5A2004ED24D /* WATTPagesController.m */; };
-		E5CFCF7716CFA82D00CCFE62 /* WATTPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCF7616CFA82D00CCFE62 /* WATTPageController.m */; };
-		E5CFCF7A16CFA87400CCFE62 /* WATTPageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCF7916CFA87400CCFE62 /* WATTPageModel.m */; };
+		E5CFCF7716CFA82D00CCFE62 /* WATTWebviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCF7616CFA82D00CCFE62 /* WATTWebviewController.m */; };
+		E5CFCF7A16CFA87400CCFE62 /* WATTWebModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCF7916CFA87400CCFE62 /* WATTWebModel.m */; };
 		E5CFCF7D16CFB14E00CCFE62 /* WATTRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CFCF7C16CFB14E00CCFE62 /* WATTRootViewController.m */; };
 		E5CFCF7F16CFD16000CCFE62 /* Data.plist in Resources */ = {isa = PBXBuildFile; fileRef = E5CFCF7E16CFD16000CCFE62 /* Data.plist */; };
 		E5DC4FCD16CEB47700F4D8E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5DC4FCC16CEB47700F4D8E4 /* UIKit.framework */; };
@@ -61,10 +61,10 @@
 		E5CABF3816D3E313004ED24D /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = SOURCE_ROOT; };
 		E5CABF3B16D3E5A2004ED24D /* WATTPagesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTPagesController.h; sourceTree = "<group>"; };
 		E5CABF3C16D3E5A2004ED24D /* WATTPagesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATTPagesController.m; sourceTree = "<group>"; };
-		E5CFCF7516CFA82D00CCFE62 /* WATTPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTPageController.h; sourceTree = "<group>"; };
-		E5CFCF7616CFA82D00CCFE62 /* WATTPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATTPageController.m; sourceTree = "<group>"; };
-		E5CFCF7816CFA87400CCFE62 /* WATTPageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTPageModel.h; sourceTree = "<group>"; };
-		E5CFCF7916CFA87400CCFE62 /* WATTPageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATTPageModel.m; sourceTree = "<group>"; };
+		E5CFCF7516CFA82D00CCFE62 /* WATTWebviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTWebviewController.h; sourceTree = "<group>"; };
+		E5CFCF7616CFA82D00CCFE62 /* WATTWebviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATTWebviewController.m; sourceTree = "<group>"; };
+		E5CFCF7816CFA87400CCFE62 /* WATTWebModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTWebModel.h; sourceTree = "<group>"; };
+		E5CFCF7916CFA87400CCFE62 /* WATTWebModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATTWebModel.m; sourceTree = "<group>"; };
 		E5CFCF7B16CFB14E00CCFE62 /* WATTRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATTRootViewController.h; sourceTree = "<group>"; };
 		E5CFCF7C16CFB14E00CCFE62 /* WATTRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATTRootViewController.m; sourceTree = "<group>"; };
 		E5CFCF7E16CFD16000CCFE62 /* Data.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Data.plist; sourceTree = "<group>"; };
@@ -101,10 +101,10 @@
 		E57220A416D143DD002F07C5 /* Web-demo */ = {
 			isa = PBXGroup;
 			children = (
-				E5CFCF7516CFA82D00CCFE62 /* WATTPageController.h */,
-				E5CFCF7616CFA82D00CCFE62 /* WATTPageController.m */,
-				E5CFCF7816CFA87400CCFE62 /* WATTPageModel.h */,
-				E5CFCF7916CFA87400CCFE62 /* WATTPageModel.m */,
+				E5CFCF7516CFA82D00CCFE62 /* WATTWebviewController.h */,
+				E5CFCF7616CFA82D00CCFE62 /* WATTWebviewController.m */,
+				E5CFCF7816CFA87400CCFE62 /* WATTWebModel.h */,
+				E5CFCF7916CFA87400CCFE62 /* WATTWebModel.m */,
 				E5CFCF7E16CFD16000CCFE62 /* Data.plist */,
 			);
 			name = "Web-demo";
@@ -293,8 +293,8 @@
 			files = (
 				E5DC4FD916CEB47700F4D8E4 /* main.m in Sources */,
 				E5DC4FDD16CEB47700F4D8E4 /* WATTAppDelegate.m in Sources */,
-				E5CFCF7716CFA82D00CCFE62 /* WATTPageController.m in Sources */,
-				E5CFCF7A16CFA87400CCFE62 /* WATTPageModel.m in Sources */,
+				E5CFCF7716CFA82D00CCFE62 /* WATTWebviewController.m in Sources */,
+				E5CFCF7A16CFA87400CCFE62 /* WATTWebModel.m in Sources */,
 				E5CFCF7D16CFB14E00CCFE62 /* WATTRootViewController.m in Sources */,
 				E572206C16D141D0002F07C5 /* WATTItemViewController.m in Sources */,
 				E572206F16D141F8002F07C5 /* WATTItemModel.m in Sources */,

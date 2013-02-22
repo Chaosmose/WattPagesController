@@ -1,5 +1,5 @@
 //
-//  WATTPageModel.h
+//  WATTPageModel.m
 //  WattPagingContainer
 //
 //  Created by Benoit Pereira da Silva on 15/02/13.
@@ -23,12 +23,10 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-//
 
-#import <Foundation/Foundation.h>
 
-@interface WATTPageModel : NSObject
+#import "WATTWebModel.h"
 
-@property (copy,nonatomic)NSURL *url;
+@implementation WATTWebModel
 
 @end

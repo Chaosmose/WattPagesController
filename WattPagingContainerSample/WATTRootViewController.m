@@ -64,7 +64,7 @@
         NSURL *url=[[NSBundle mainBundle] URLForResource:@"Data" withExtension:@"plist"];
         NSArray*list=[NSArray arrayWithContentsOfURL:url];
         for (NSString* stringUrl in list) {
-            WATTPageModel *model=[[WATTPageModel alloc] init];
+            WATTWebModel *model=[[WATTWebModel alloc] init];
             model.url=[NSURL URLWithString:stringUrl];
             [_listOfItem addObject:model];
         }
@@ -101,10 +101,10 @@
         return controller;
     }
     
-    if([[self _modelAtIndex:index] isKindOfClass:[WATTPageModel class]]){
+    if([[self _modelAtIndex:index] isKindOfClass:[WATTWebModel class]]){
         
         // 1- We try to reuse an existing viewController
-        WATTPageController*controller=(WATTPageController*)[self dequeueViewControllerWithClass:[WATTPageController class]];
+        WATTWebviewController*controller=(WATTWebviewController*)[self dequeueViewControllerWithClass:[WATTWebviewController class]];
         
         // 2- If there is no view Controllers we instanciate one.
         if(!controller)

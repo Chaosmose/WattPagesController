@@ -26,12 +26,12 @@
 // THE SOFTWARE.
 //
 
-#import "WATTPageController.h"
+#import "WATTWebviewController.h"
 
-@interface WATTPageController ()
+@interface WATTWebviewController ()
 @end
 
-@implementation WATTPageController {
+@implementation WATTWebviewController {
     NSURLRequest *_currentRequest;
 }
 
@@ -61,7 +61,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     if(![webView.request.URL.absoluteString isEqualToString:@"about:blank"]){
         
-        WATTPageController* __weak weakSelf=self;
+        WATTWebviewController* __weak weakSelf=self;
         [UIView animateWithDuration:0.5f
                               delay:0.f
                             options:UIViewAnimationOptionCurveEaseInOut
@@ -80,8 +80,8 @@
 
 
 -(void)configureWithModel:(id)model{
-    if([model isKindOfClass:[WATTPageModel class]]){
-        WATTPageModel *castedModel=(WATTPageModel*)model;
+    if([model isKindOfClass:[WATTWebModel class]]){
+        WATTWebModel *castedModel=(WATTWebModel*)model;
         // we do configure the view according to the model;
         if(castedModel.url){
             BOOL urlHasChanged= (![castedModel.url.absoluteString isEqualToString:_currentRequest.URL.absoluteString]|| ! _currentRequest);

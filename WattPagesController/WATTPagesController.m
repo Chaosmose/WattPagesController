@@ -52,7 +52,6 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    
     _viewControllers=[NSMutableDictionary dictionary];
     _indexes=[NSMutableArray array];
     _pagingEnabled=YES;
@@ -75,8 +74,8 @@
     [_scrollView setShowsVerticalScrollIndicator:NO];
     [_scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     [_scrollView setDelegate:self];
-    [self.view addSubview:_scrollView];
     
+    [self.view addSubview:_scrollView];
     self.backgroundColor=[UIColor blackColor]; // We setup to black by default
     
 }
@@ -94,6 +93,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 
 -(void)removeFromParentViewController{
@@ -304,6 +304,9 @@
 }
 
 
+-(void)viewWillLayoutSubviews{
+    WATTLog(@"***");
+}
 
 
 #pragma mark -
@@ -470,6 +473,8 @@
         [self goToPage:_pageIndex animated:NO];
     }
 }
+
+
 
 
 @end

@@ -27,8 +27,8 @@
 //
 
 #import "WATTPagesController.h"
-#import "WATTPageController.h"
-#import "WATTPageModel.h"
+#import "WATTWebviewController.h"
+#import "WATTWebModel.h"
 #import "WATTItemViewController.h"
 #import "WATTItemModel.h"
 
