@@ -333,14 +333,18 @@
 
 
 -(void)nextPageAnimated:(BOOL)animated;{
-    _pageIndex++;
-    [self goToPage:_pageIndex animated:animated];
+    if([self.dataSource pageCount]>0){
+        _pageIndex++;
+        [self goToPage:_pageIndex animated:animated];
+    }
 }
 
 
 -(void)previousPageAnimated:(BOOL)animated{
-    _pageIndex--;
-    [self goToPage:_pageIndex animated:animated];
+    if([self.dataSource pageCount]>0){
+        _pageIndex--;
+        [self goToPage:_pageIndex animated:animated];
+    }
 }
 
 
