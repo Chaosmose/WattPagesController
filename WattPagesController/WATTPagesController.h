@@ -123,6 +123,14 @@ typedef enum {
  @return An `UIViewController` 
  */
 -(UIViewController*)dequeueViewControllerWithClass:(Class)theClass;
+
+
+/**
+ Returns the curent viewController (the view Controller that is closer to the center.)
+ @return An `UIViewController`
+ */
+-(UIViewController*)currentViewController;
+
 @end
 
 

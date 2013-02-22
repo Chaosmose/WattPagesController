@@ -41,9 +41,7 @@
     
     NSMutableDictionary     *_viewControllers;
     NSMutableArray          *_indexes;
-    
     NSUInteger              _futureIndex; // The predictible next index.
-    
     
 }
 
@@ -357,6 +355,15 @@
                                                 _scrollView.frame.size.width,
                                                 _scrollView.frame.size.height)
                             animated:animated];
+}
+
+
+/**
+ Returns the curent viewController (the most central)
+ @return An `UIViewController`
+ */
+-(UIViewController*)currentViewController{
+    return [_indexes objectAtIndex:_pageIndex];
 }
 
 
