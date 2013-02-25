@@ -54,6 +54,7 @@
     _indexes=[NSMutableArray array];
     _pagingEnabled=YES;
     _bounces=NO;
+    _pageIndex=_futureIndex=0;
     
     // Set up the main view
     [self.view setAutoresizesSubviews:YES];
@@ -74,6 +75,7 @@
     [_scrollView setDelegate:self];
     
     [self.view addSubview:_scrollView];
+    [self.view sendSubviewToBack:_scrollView]; // If there are for example next and previous button.
     self.backgroundColor=[UIColor blackColor]; // We setup to black by default
     
 }
@@ -311,9 +313,8 @@
 
 -(void)populate{
     _scrollView.contentSize=[self _scrollViewContentSize];
-    _scrollView.contentOffset = CGPointMake(0, 0);
-    _pageIndex=_futureIndex=0;
-    [self _preparePageAtIndex:0];
+    //_scrollView.contentOffset = CGPointMake(0, 0);
+    [self _preparePageAtIndex:_pageIndex];
 }
 
 

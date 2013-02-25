@@ -45,7 +45,8 @@
     self.bounces=YES;
     [self _loadItems]; // Load the data
     [self populate];
-    [self goToPage:2 animated:YES];
+    [self goToPage:0
+          animated:YES];
 }
 
 #pragma mark - data
@@ -55,25 +56,49 @@
     if(!_listOfItem){
         _listOfItem=[NSMutableArray array];
                 
-        for (int i=0; i<5;i++) {
-            WATTItemModel *model=[WATTItemModel alloc];
-            model.imageName=[NSString stringWithFormat:@"nombres.00%i.jpg",i];
-            [_listOfItem addObject:model];
+        for (int i=0; i<4;i++) {
+            [self _addItemForIndex:i];
         }
         
         NSURL *url=[[NSBundle mainBundle] URLForResource:@"Data" withExtension:@"plist"];
         NSArray*list=[NSArray arrayWithContentsOfURL:url];
         for (NSString* stringUrl in list) {
-            WATTWebModel *model=[[WATTWebModel alloc] init];
-            model.url=[NSURL URLWithString:stringUrl];
-            [_listOfItem addObject:model];
+            [self _addItemWithURL:[NSURL URLWithString:stringUrl]];
         }
     }
+}
+
+
+-(void)_addItemForIndex:(NSInteger)index{
+    WATTItemModel *model=[WATTItemModel alloc];
+    model.imageName=[NSString stringWithFormat:@"nombres.00%i.jpg",index];
+    [_listOfItem insertObject:model atIndex:index];
+}
+
+
+-(void)_addItemWithURL:(NSURL*)url{
+    WATTWebModel *model=[[WATTWebModel alloc] init];
+    model.url=url;
+    [_listOfItem addObject:model];
 }
 
 -(id)_modelAtIndex:(NSUInteger)index{
     return [_listOfItem objectAtIndex:index];
 }
+
+
+
+-(void)pageIndexDidChange:(NSUInteger)pageIndex{
+    //A sample of dynamic injection
+    //
+    if(pageIndex==3){
+        if(![[self _modelAtIndex:4] isKindOfClass:[WATTItemModel class]]){
+            [self _addItemForIndex:4];
+            //[self populate];
+        }
+    }
+}
+
 
 #pragma mark -
 #pragma mark WATTPagingDataSource
@@ -127,6 +152,24 @@
 -(NSUInteger)pageCount{
     return _listOfItem.count;
 }
+
+
+- (void)viewDidUnload {
+    [self setPreviousButton:nil];
+    [self setNextButton:nil];
+    [super viewDidUnload];
+}
+
+#pragma mark - Actions
+
+- (IBAction)previous:(id)sender {
+    [self previousPageAnimated:YES];
+}
+
+- (IBAction)next:(id)sender {
+   [self nextPageAnimated:YES];
+}
+
 
 
 @end

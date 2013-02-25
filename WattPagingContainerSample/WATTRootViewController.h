@@ -34,4 +34,10 @@
 
 @interface WATTRootViewController : WATTPagesController<WATTPagingDataSource>
 
+@property (weak, nonatomic) IBOutlet UIButton *previousButton;
+@property (weak, nonatomic) IBOutlet UIButton *nextButton;
+
+- (IBAction)previous:(id)sender;
+- (IBAction)next:(id)sender;
+
 @end
