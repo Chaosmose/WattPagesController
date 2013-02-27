@@ -313,7 +313,8 @@
 
 -(void)populateAndGoToIndex:(NSUInteger)index animated:(BOOL)animated{
     _scrollView.contentSize=[self _scrollViewContentSize];
-    [self goToPage:index animated:animated];
+    [self goToPage:index
+          animated:animated];
 }
 
 
@@ -353,7 +354,11 @@
 
 -(void)goToPage:(NSUInteger)index
        animated:(BOOL)animated{
-    if(_pageIndex!=index){
+    
+    if(_pageIndex!=index || _pageIndex==NSNotFound){
+        if(index==NSNotFound){
+            index=0;
+        }
     _pageIndex=index;
     [self pageIndexDidChange:_pageIndex];
         
