@@ -44,9 +44,8 @@
     self.backgroundColor=[UIColor blackColor];
     self.bounces=YES;
     [self _loadItems]; // Load the data
-    [self populate];
-    [self goToPage:0
-          animated:YES];
+    [self populateAndGoToIndex:0
+                      animated:NO];
 }
 
 #pragma mark - data

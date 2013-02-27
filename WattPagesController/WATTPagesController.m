@@ -54,7 +54,7 @@
     _indexes=[NSMutableArray array];
     _pagingEnabled=YES;
     _bounces=NO;
-    _pageIndex=_futureIndex=0;
+    _pageIndex=_futureIndex=NSNotFound;
     
     // Set up the main view
     [self.view setAutoresizesSubviews:YES];
@@ -304,17 +304,11 @@
 }
 
 
--(void)viewWillLayoutSubviews{
-    WATTLog(@"***");
-}
-
-
 #pragma mark -
 
--(void)populate{
+-(void)populateAndGoToIndex:(NSUInteger)index animated:(BOOL)animated{
     _scrollView.contentSize=[self _scrollViewContentSize];
-    //_scrollView.contentOffset = CGPointMake(0, 0);
-    [self _preparePageAtIndex:_pageIndex];
+    [self goToPage:index animated:animated];
 }
 
 

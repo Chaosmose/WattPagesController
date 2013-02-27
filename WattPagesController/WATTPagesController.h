@@ -97,7 +97,8 @@ typedef enum {
 /**
   Reconfigures according to the data source.
  **/
--(void)populate;
+-(void)populateAndGoToIndex:(NSUInteger)index
+                   animated:(BOOL)animated;
 
 /**
  Position without any transition to the given index
