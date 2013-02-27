@@ -360,7 +360,7 @@
             index=0;
         }
     _pageIndex=index;
-    [self pageIndexDidChange:_pageIndex];
+    
         
     _futureIndex=index;
     [self _preparePageAtIndex:index];
@@ -370,6 +370,8 @@
                                                 _scrollView.frame.size.width,
                                                 _scrollView.frame.size.height)
                             animated:animated];
+        
+    [self pageIndexDidChange:_pageIndex];
     }
 }
 
@@ -379,7 +381,12 @@
  @return An `UIViewController`
  */
 -(UIViewController*)currentViewController{
-    return [_indexes objectAtIndex:_pageIndex];
+    if(_indexes
+       && _pageIndex<[_indexes count]
+       && ![[_indexes objectAtIndex:_pageIndex]isKindOfClass:[NSNull class]]){
+        return [_indexes objectAtIndex:_pageIndex];
+    }
+    return nil;
 }
 
 
