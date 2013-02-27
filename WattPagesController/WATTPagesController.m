@@ -258,7 +258,12 @@
                                 withObject:[NSNull null]];
         }
         //We place a reference viewController at its new index.
+        //If necessary we register NSNUll placeHolders
         if(index>=[_indexes count]){
+            int delta=index-[_indexes count];
+            for (int i=0; i<delta; i++) {
+                [_indexes addObject:[NSNull null]];
+            }
             [_indexes addObject:viewController];
         }else{
             [_indexes replaceObjectAtIndex:index
