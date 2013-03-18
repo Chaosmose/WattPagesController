@@ -53,6 +53,7 @@
     _viewControllers=[NSMutableDictionary dictionary];
     _indexes=[NSMutableArray array];
     _pagingEnabled=YES;
+    _scrollEnabled=YES;
     _bounces=NO;
     _pageIndex=_futureIndex=NSNotFound;
     
@@ -67,6 +68,7 @@
     _scrollView=[[UIScrollView alloc] initWithFrame:[self _adpativeReferenceBounds]];//initWithFrame:CGRectMake(10, 10, 512, 512)];
     [_scrollView setBackgroundColor:[UIColor darkGrayColor]];
     [_scrollView setClipsToBounds:YES];
+    [_scrollView setScrollEnabled:self.scrollEnabled];
     [_scrollView setPagingEnabled:self.pagingEnabled];
     [_scrollView setBounces:self.bounces];
     [_scrollView setShowsHorizontalScrollIndicator:NO];
@@ -118,6 +120,13 @@
     
     _backgroundColor=nil;
     
+}
+
+#pragma mark -
+
+-(void)setScrollEnabled:(BOOL)scrollEnabled{
+    _scrollEnabled=scrollEnabled;
+    [_scrollView setScrollEnabled:scrollEnabled];
 }
 
 #pragma mark Look and feel

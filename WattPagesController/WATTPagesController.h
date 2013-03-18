@@ -85,6 +85,12 @@ typedef enum {
 @property (assign,nonatomic)BOOL pagingEnabled;
 
 /**
+ default YES. Blocks the scroller
+ **/
+@property (assign,nonatomic)BOOL scrollEnabled;
+
+
+/**
  default NO. if YES, bounces past edge of content and back again
  **/
 @property (assign,nonatomic)BOOL bounces;
