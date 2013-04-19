@@ -1,4 +1,4 @@
-How to use : 
+How to use :
 
 Import WATTPagesController.h,m in your project.  
 
