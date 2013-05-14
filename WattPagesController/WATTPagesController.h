@@ -141,6 +141,8 @@ typedef enum {
  */
 -(void)pageIndexDidChange:(NSUInteger)pageIndex;
 
+-(void)setScrollToTopOfCurrentViewController:(BOOL)scrollToTop;
+
 @end
 
 

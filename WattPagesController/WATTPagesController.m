@@ -396,6 +396,24 @@
 }
 
 
+-(void)setScrollToTopOfCurrentViewController:(BOOL)scrollToTop{
+    if(scrollToTop){
+        [_scrollView setScrollsToTop:NO];
+    }else{
+        [_scrollView setScrollsToTop:YES];
+    }
+    for (id c in _indexes) {
+        if([c respondsToSelector:@selector(setScrollsToTop:)]){
+            [c setScrollsToTop:NO];
+        }
+    }
+    id vc=[self currentViewController];
+    if([vc respondsToSelector:@selector(setScrollsToTop:)]){
+        [vc setScrollsToTop:scrollToTop];
+    }
+}
+
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender{
