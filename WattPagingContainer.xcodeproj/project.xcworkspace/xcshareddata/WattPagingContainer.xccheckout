@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>AA7195D9-784C-464C-8037-085509FFE7C4</string>
+	<key>IDESourceControlProjectName</key>
+	<string>WattPagingContainer</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>85F2E955-F5F5-4864-86FA-A1D562F873AE</key>
+		<string>https://github.com/benoit-pereira-da-silva/WattPagesController.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>WattPagingContainer.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>85F2E955-F5F5-4864-86FA-A1D562F873AE</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/benoit-pereira-da-silva/WattPagesController.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>85F2E955-F5F5-4864-86FA-A1D562F873AE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>85F2E955-F5F5-4864-86FA-A1D562F873AE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>WattPagesController</string>
+		</dict>
+	</array>
+</dict>
+</plist>
