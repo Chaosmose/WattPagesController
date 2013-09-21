@@ -82,13 +82,13 @@
     
 }
 
-/*
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     if(_pageIndex!=NSNotFound && _IOS7ANDGREATER){
         [self _repositionControllers];
     }
-}*/
+}
 
 -(void)viewDidUnload{
     [super viewDidUnload];
