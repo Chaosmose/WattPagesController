@@ -88,6 +88,7 @@
 }
 
 
+
 - (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -370,15 +371,19 @@
         
     _futureIndex=index;
     [self _preparePageAtIndex:index];
+    [self _scrollToIndex:index animated:animated];
+    [self pageIndexDidChange:_pageIndex];
+    }
+}
+
+- (void)_scrollToIndex:(NSUInteger)index
+              animated:(BOOL)animated{
     BOOL horizontal=(self.direction==WATTSlidingDirectionHorizontal);
     [_scrollView scrollRectToVisible:CGRectMake(_scrollView.frame.size.width * ((horizontal)?index:0.f),
                                                 _scrollView.frame.size.height * ((!horizontal)?index:0.f),
                                                 _scrollView.frame.size.width,
                                                 _scrollView.frame.size.height)
                             animated:animated];
-        
-    [self pageIndexDidChange:_pageIndex];
-    }
 }
 
 
