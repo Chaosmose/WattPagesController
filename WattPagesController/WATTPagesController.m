@@ -40,6 +40,8 @@
     NSMutableArray          *_indexes;
     NSUInteger              _futureIndex; // The predictible next index.
     
+    BOOL _IOS7ANDGREATER;
+    
 }
 
 #pragma mark -
@@ -47,6 +49,7 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    _IOS7ANDGREATER=(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1);
     _viewControllers=[NSMutableDictionary dictionary];
     _indexes=[NSMutableArray array];
     _pagingEnabled=YES;
@@ -79,6 +82,12 @@
     
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if(_pageIndex!=NSNotFound && _IOS7ANDGREATER){
+        [self _repositionControllers];
+    }
+}
 
 -(void)viewDidUnload{
     [super viewDidUnload];
@@ -86,7 +95,6 @@
     _scrollView = nil;
     _backgroundColor=nil;
 }
-
 
 
 - (void)didReceiveMemoryWarning{
@@ -197,21 +205,21 @@
             
             UIViewController * __weak controller=[self.dataSource viewControllerForIndex:newIndex];
             NSString *identifier=NSStringFromClass([controller class]);
-            
-            // Update the registry
-            [self _register:controller
-                    atIndex:newIndex];
-            
-            // Add the view controller if ncessary
-            [self _addIfNecessaryViewController:controller
-                                 withIdentifier:identifier];
-            
-            // Position in the scrollview
-            [self _positionViewFrom:controller
-                            atIndex:newIndex];
-            
-            WATTLog(@"Preparing index : %i [%@]" ,newIndex,controller);
-            
+            if(controller.view){// IOS 7
+                // Update the registry
+                [self _register:controller
+                        atIndex:newIndex];
+                
+                // Add the view controller if ncessary
+                [self _addIfNecessaryViewController:controller
+                                     withIdentifier:identifier];
+                
+                // Position in the scrollview
+                [self _positionViewFrom:controller
+                                atIndex:newIndex];
+                
+                WATTLog(@"Preparing index : %i [%@]" ,newIndex,controller);
+            }
         }
     }else{
         WATTLog(@"No necessity to prepare : %i",newIndex);
@@ -366,24 +374,20 @@
         if(index==NSNotFound){
             index=0;
         }
-    _pageIndex=index;
-    
+        _pageIndex=index;
         
-    _futureIndex=index;
-    [self _preparePageAtIndex:index];
-    [self _scrollToIndex:index animated:animated];
-    [self pageIndexDidChange:_pageIndex];
+        
+        _futureIndex=index;
+        [self _preparePageAtIndex:index];
+        BOOL horizontal=(self.direction==WATTSlidingDirectionHorizontal);
+        [_scrollView scrollRectToVisible:CGRectMake(_scrollView.frame.size.width * ((horizontal)?index:0.f),
+                                                    _scrollView.frame.size.height * ((!horizontal)?index:0.f),
+                                                    _scrollView.frame.size.width,
+                                                    _scrollView.frame.size.height)
+                                animated:animated];
+        
+        [self pageIndexDidChange:_pageIndex];
     }
-}
-
-- (void)_scrollToIndex:(NSUInteger)index
-              animated:(BOOL)animated{
-    BOOL horizontal=(self.direction==WATTSlidingDirectionHorizontal);
-    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.frame.size.width * ((horizontal)?index:0.f),
-                                                _scrollView.frame.size.height * ((!horizontal)?index:0.f),
-                                                _scrollView.frame.size.width,
-                                                _scrollView.frame.size.height)
-                            animated:animated];
 }
 
 
@@ -522,19 +526,22 @@
     if(!CGSizeEqualToSize(newContentSize,  _scrollView.contentSize)){
         // Reset the scroll view content size
         _scrollView.contentSize=newContentSize;
-        // And reposition the controllers
-        NSUInteger i=0;
-        for (UIViewController *controller in _indexes) {
-            if(controller && ![controller isMemberOfClass:[NSNull class]]){
-                [self _positionViewFrom:controller
-                                atIndex:i];
-            }
-            i++;
-        }
-        [self goToPage:_pageIndex animated:NO];
+        [self _repositionControllers];
     }
 }
 
+
+-(void)_repositionControllers{
+    NSUInteger i=0;
+    for (UIViewController *controller in _indexes) {
+        if(controller && ![controller isMemberOfClass:[NSNull class]]){
+            [self _positionViewFrom:controller
+                            atIndex:i];
+        }
+        i++;
+    }
+    [self goToPage:_pageIndex animated:NO];
+}
 
 
 
