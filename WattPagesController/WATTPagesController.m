@@ -371,13 +371,14 @@
 -(void)goToPage:(NSUInteger)index
        animated:(BOOL)animated{
     
+    if(index==NSNotFound){
+        index=0;
+    }
+    
     if(index<0 ||index> [self.dataSource pageCount]-1)
         return;
     
-    if(_pageIndex!=index || _pageIndex==NSNotFound){
-        if(index==NSNotFound){
-            index=0;
-        }
+    if(_pageIndex!=index){
         _pageIndex=index;
         
         
