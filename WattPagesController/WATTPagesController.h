@@ -65,7 +65,7 @@ typedef enum {
 /**
  The current page index
  */
-@property (readonly,nonatomic)NSUInteger pageIndex;
+@property (readonly,nonatomic)NSInteger pageIndex;
 
 /**
  The datasource
@@ -109,7 +109,7 @@ typedef enum {
  @param index 
  @param animated if YES the transition will be animated
  */
--(void)goToPage:(NSUInteger)index
+-(void)goToPage:(NSInteger)index
        animated:(BOOL)animated;
 
 /**
@@ -141,7 +141,7 @@ typedef enum {
  Does nothing but can be overriden to perform an action on index change.
  @param pageIndex the new page index
  */
--(void)pageIndexDidChange:(NSUInteger)pageIndex;
+-(void)pageIndexDidChange:(NSInteger)pageIndex;
 
 -(void)setScrollToTopOfCurrentViewController:(BOOL)scrollToTop;
 

@@ -363,12 +363,12 @@
 }
 
 
--(void)pageIndexDidChange:(NSUInteger)pageIndex{
+-(void)pageIndexDidChange:(NSInteger)pageIndex{
     // No implementation
 }
 
 
--(void)goToPage:(NSUInteger)index
+-(void)goToPage:(NSInteger)index
        animated:(BOOL)animated{
     
     if(index==NSNotFound){

@@ -34,6 +34,14 @@
 
 #pragma mark - life cycle
 
+-(instancetype)init{
+    self=[super init];
+    if (self) {
+        self.automaticallyAdjustsScrollViewInsets=NO;
+    }
+    return self;
+}
+
 -(void)viewDidLoad{
     [super viewDidLoad];
     self.dataSource=self;
@@ -84,7 +92,7 @@
 
 
 
--(void)pageIndexDidChange:(NSUInteger)pageIndex{
+-(void)pageIndexDidChange:(NSInteger)pageIndex{
     //A sample of dynamic injection
     //
     if(pageIndex==3){
