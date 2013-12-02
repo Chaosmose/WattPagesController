@@ -65,7 +65,7 @@
     
     // Configure and add the scroll view
     
-    _scrollView=[[UIScrollView alloc] initWithFrame:[self _adpativeReferenceBounds]];//initWithFrame:CGRectMake(10, 10, 512, 512)];
+    _scrollView=[[UIScrollView alloc] initWithFrame:[self _adpativeReferenceBounds]];
     [_scrollView setBackgroundColor:[UIColor darkGrayColor]];
     [_scrollView setClipsToBounds:YES];
     [_scrollView setScrollEnabled:self.scrollEnabled];
@@ -546,6 +546,22 @@
         i++;
     }
     [self goToPage:_pageIndex animated:NO];
+}
+
+
+#pragma mark - IOS7
+
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleDefault;
+}
+
+- (BOOL)prefersStatusBarHidden{
+    return YES;
+}
+
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation{
+    return UIStatusBarAnimationFade;
 }
 
 

@@ -22,8 +22,6 @@
 
 #import <UIKit/UIKit.h>
 
-#warning The geometry should be adapted to support IOS7 to the current context not the whole screen.
-
  // You can define __WATT_DEV_LOG anyware to see developments logs.
 #ifdef __WATT_DEV_LOG      
 #define WATTLog(format, ... ){NSLog( @"%s%d : %@",__PRETTY_FUNCTION__,__LINE__ ,[NSString stringWithFormat:(format), ##__VA_ARGS__]);}
@@ -143,6 +141,11 @@ typedef enum {
  */
 -(void)pageIndexDidChange:(NSInteger)pageIndex;
 
+/**
+ *  Relays a setScrollsToTop to the current view controller
+ *
+ *  @param scrollToTop a boolean value
+ */
 -(void)setScrollToTopOfCurrentViewController:(BOOL)scrollToTop;
 
 @end

@@ -38,6 +38,7 @@
     self=[super init];
     if (self) {
         self.automaticallyAdjustsScrollViewInsets=NO;
+        self.extendedLayoutIncludesOpaqueBars=NO;
     }
     return self;
 }
@@ -173,6 +174,7 @@
 - (IBAction)next:(id)sender {
    [self nextPageAnimated:YES];
 }
+
 
 
 
